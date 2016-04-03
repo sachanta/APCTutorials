@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+  <div style="text-align: center;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="text-decoration: underline;"><img style="width: 265px; height: 106px;" alt="Appvance" src="images/ptt_logo_tm.jpg"></span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+  <title>Appvance PerformanceCloud (APC) Examples - Tutorial on .NET and C Sharp Testing</title>
+
+  
+
+
+<h1 align="center"><font face="Helvetica, Arial, sans-serif">Testing
+with C# and .NET </font>
+</h1>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">APC
+provides a .NET ScriptRunner to accomplish the following:</font></p>
+
+<ul>
+
+  <li><font face="Helvetica, Arial, sans-serif">Write unit tests
+in C# of your application. Repurpose the unit tests to be
+functional tests, load and performance tests, and production monitors
+of your application.<br>
+    <br>
+    </font></li>
+  <li><font face="Helvetica, Arial, sans-serif">C# applications are
+often GUI applications that are supposed to be
+run interactively by users. Testmaker uses its ability to run command
+line applications to support C# applications developed as scripts
+that run GUI less.</font></li>
+</ul>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">The following
+is a simple
+application Appvance created in Visual Studio. We made
+the&nbsp;GUI-Less by removing the Forms and using a simple module
+with an <b>Main</b>
+subroutine. This example
+uses the WinInet library to read a page and then a string search to
+assert it contains some text.&nbsp;</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">First, let's
+declare the assembly:</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif"><small><small><span style="font-family: Courier New,Courier,monospace;">using
+System.Reflection;</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">using
+System.Runtime.CompilerServices;</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">using
+System.Runtime.InteropServices;</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// General
+Information about an assembly is controlled through the following </span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// set of
+attributes. Change these attribute values to modify the information</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// associated
+with an assembly.</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyTitle("CheckURL")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyDescription("")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyConfiguration("")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyCompany("PushToTest")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyProduct("CheckURL")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyCopyright("Copyright © PushToTest 2011")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyTrademark("")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyCulture("")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// Setting
+ComVisible to false makes the types in this assembly not visible </span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// to COM
+components.&nbsp; If you need to access a type in this assembly from </span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// COM, set
+the ComVisible attribute to true on that type.</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+ComVisible(false)]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// The
+following GUID is for the ID of the typelib if this project is exposed
+to COM</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+Guid("3ea6166b-5ab3-40e1-9c46-3b2b235d7944")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// Version
+information for an assembly consists of the following four values:</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Major Version</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Minor Version </span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Build Number</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Revision</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">//</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// You can
+specify all the values or you can default the Build and Revision
+Numbers </span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// by using
+the '*' as shown below:</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">// [assembly:
+AssemblyVersion("1.0.*")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyVersion("1.0.0.0")]</span><br style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">[assembly:
+AssemblyFileVersion("1.0.0.0")]</span></small></small><br>
+<br>
+</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">Find the
+logic of the program in CheckURL.cs. This defines the CheckURL class.
+The class defines a single 'main' method to call. It accepts parameters
+from the command-line:</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">-url defines
+the URL to load</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">-asserttext
+defines the text to check in the URL response</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">CheckURL
+throws an exception when the asserttext value is not found in the URL
+response.</font></p>
+
+<font face="Helvetica, Arial, sans-serif">We build this project
+to&nbsp;a .exe file.</font>
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">We use the APC Scenario Builder to
+reference the .exe file in a APC
+Scenario.</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><img style="border: 1px solid ; width: 1000px;" alt="Editor with C# test use case step" src="images/dotnet_editor.png"></p>
+
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" cellspacing="2" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" name="graphics30" align="bottom" border="0" height="2" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.pushtotest.com/"><font color="#000000"><img style="width: 152px; height: 33px;" alt="PushToTest logo" src="images/ptt_logo_tm.jpg" name="graphics31"></font></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" name="graphics32" align="bottom" border="0" height="2" width="30"></p>
+            </td>
+            <td>
+            <p><font size="2">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+</body></html>

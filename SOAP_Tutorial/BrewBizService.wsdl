@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:apachesoap="http://xml.apache.org/xml-soap" 
+xmlns:impl="http://localhost:8080/axis/services/BrewBizService" 
+xmlns:intf="http://localhost:8080/axis/services/BrewBizService" 
+xmlns:tns1="http://examples.pushtotest.com" 
+targetNamespace="http://localhost:8080/axis/services/BrewBizService" 
+xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.3
+Built on Oct 05, 2005 (05:23:37 EDT)-->
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://examples.pushtotest.com">
+            <xsd:element name="Change_Price">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ProductNumber" type="xsd:integer"/>
+                        <xsd:element name="Type" type="xsd:string"/>
+                        <xsd:element name="Quantity" type="xsd:integer"/>
+                        <xsd:element name="Location" type="xsd:integer"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <element name="Confirm_Price" type="xsd:anyType"/>
+        </schema>
+        <schema targetNamespace="http://localhost:8080/axis/services/BrewBizService" xmlns="http://www.w3.org/2001/XMLSchema">
+            <element name="Change_PriceReturn" type="xsd:anyType"/>
+            <element name="Confirm_PriceReturn" type="xsd:anyType"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="Confirm_PriceResponse">
+        <wsdl:part element="impl:Confirm_PriceReturn" name="Confirm_PriceReturn"/>
+    </wsdl:message>
+    <wsdl:message name="Confirm_PriceRequest">
+        <wsdl:part element="tns1:Confirm_Price" name="part"/>
+    </wsdl:message>
+    <wsdl:message name="Change_PriceRequest">
+        <wsdl:part element="tns1:Change_Price" name="part"/>
+    </wsdl:message>
+    <wsdl:message name="Change_PriceResponse">
+        <wsdl:part element="impl:Change_PriceReturn" name="Change_PriceReturn"/>
+    </wsdl:message>
+    <wsdl:portType name="BrewBizService">
+        <wsdl:operation name="Change_Price">
+            <wsdl:input message="impl:Change_PriceRequest" name="Change_PriceRequest"/>
+            <wsdl:output message="impl:Change_PriceResponse" name="Change_PriceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="Confirm_Price">
+            <wsdl:input message="impl:Confirm_PriceRequest" name="Confirm_PriceRequest"/>
+            <wsdl:output message="impl:Confirm_PriceResponse" name="Confirm_PriceResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BrewBizServiceSoapBinding" type="impl:BrewBizService">
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="Change_Price">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="Change_PriceRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="Change_PriceResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Confirm_Price">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="Confirm_PriceRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="Confirm_PriceResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="BrewBizServiceService">
+        <wsdl:port binding="impl:BrewBizServiceSoapBinding" name="BrewBizService">
+            <wsdlsoap:address location="http://localhost:8080/axis/services/BrewBizService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

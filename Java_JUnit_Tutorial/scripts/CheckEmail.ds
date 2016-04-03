@@ -1,0 +1,38 @@
+<testcase name='UntitledTestObject' description='' author='' version=''>
+
+<metainfo>
+</metainfo>
+
+<dpl filename="" exectype="" errorhandling=""/>
+<object-repository nodeJson=''>
+</object-repository>
+
+<step action="navigateTo" value="&quot;http://localhost:8080/BrewBizWeb/inbox.html&quot;" type="web" sequence="0">
+	<dialect type="sahi">
+		<accessor type="navigateTo" value='' selected="true"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value='' selected="true"/>
+	</dialect>
+</step>
+
+
+
+<step action="assertExists" value='' type="web" sequence="1">
+	<dialect type="sahi">
+		<accessor type="assertExists" value="div(&quot;Subject: GUID-100-123&quot;)" selected="true"/>
+		<accessor type="assertExists" value="div(&quot;guid&quot;)" selected="false"/>
+		<accessor type="assertExists" value="div(2)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;guid&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[@id='guid']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[3]&quot;" selected="false"/>
+	</dialect>
+	<dialect type="flextesting">
+		<accessor type="assertExists" attribute='' value='' selected="false"/>
+	</dialect>
+</step>
+
+
+</testcase>

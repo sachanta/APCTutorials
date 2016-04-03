@@ -1,0 +1,126 @@
+<testcase name='AddCompany' description='' author='' version=''>
+
+<metainfo>
+</metainfo>
+
+<dpl filename="" exectype="" errorhandling="stop"/>
+
+<step action="navigateTo" value="&quot;http://localhost:8080/AjaxApp/examples/desktop/desktop.html&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="0">
+	<dialect type="sahi">
+		<accessor type="navigateTo" value='' selected="true"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value='' selected="true"/>
+	</dialect>
+</step>
+
+
+
+<step action="doubleClick" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="1">
+	<dialect type="sahi">
+		<accessor type="click" value="image(&quot;s.gif&quot;)" selected="true"/>
+		<accessor type="click" value="image(2)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//dt[@id='grid-win-shortcut']/a/img&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//dt[1]/a/img&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="click" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="2">
+	<dialect type="sahi">
+		<accessor type="click" value="button(&quot;Add Company&quot;)" selected="true"/>
+		<accessor type="click" value="button(&quot;x-btn-text add&quot;)" selected="false"/>
+		<accessor type="click" value="button(2)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//button[@id='ext-gen250']&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//table[@id='ext-comp-1021']/tbody/tr/td[2]/em/button&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[2]/div[1]/div/div/div/div/div/div[1]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/em/button&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;PushToTest&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="3">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;company&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(&quot;company&quot;)" selected="false"/>
+		<accessor type="setValue" value="textbox(0)" selected="false"/>
+		<accessor type="setValue" value="textbox(&quot; x-form-text x-form-field x-form-focus&quot;)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//input[@id='company']&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//div[@id='x-form-el-company']/input&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;500&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="4">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;price&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(&quot;price&quot;)" selected="false"/>
+		<accessor type="setValue" value="textbox(1)" selected="false"/>
+		<accessor type="setValue" value="textbox(&quot; x-form-text x-form-field x-form-focus&quot;)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//input[@id='price']&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//div[@id='x-form-el-price']/input&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[2]/div[1]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;50&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="5">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;change&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(&quot;change&quot;)" selected="false"/>
+		<accessor type="setValue" value="textbox(2)" selected="false"/>
+		<accessor type="setValue" value="textbox(&quot; x-form-text x-form-field x-form-focus&quot;)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//input[@id='change']&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//div[@id='x-form-el-change']/input&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[3]/div[1]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="click" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="6">
+	<dialect type="sahi">
+		<accessor type="click" value="button(&quot;Save&quot;)" selected="true"/>
+		<accessor type="click" value="button(&quot;x-btn-text&quot;)" selected="false"/>
+		<accessor type="click" value="button(4)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//button[@id='ext-gen384']&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;//table[@id='ext-comp-1030']/tbody/tr/td[2]/em/button&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div/div/div[2]/div[2]/div/div/div/div/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/em/button&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="assertExists" value="&quot;PushToTest&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="7">
+	<dialect type="sahi">
+		<accessor type="assertContainsText" value="div(&quot;PushToTest&quot;)" selected="true"/>
+		<accessor type="assertContainsText" value="div(&quot;x-grid3-cell-inner x-grid3-col-1[20]&quot;)" selected="false"/>
+		<accessor type="assertContainsText" value="div(234)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//div[@id='ext-gen281']/div[21]/table/tbody/tr/td[2]/div&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//div[21]/table/tbody/tr/td[2]/div&quot;" selected="false"/>
+	</dialect>
+	<dialect type="flextesting">
+		<accessor type="assertContainsText" attribute='' value='' selected="false"/>
+	</dialect>
+</step>
+
+
+</testcase>

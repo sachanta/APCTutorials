@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance Examples - Web Service (SOAP/WSDL) Test</title></head><body>
+<div style="text-align: center;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="text-decoration: underline;"><img style="width: 278px; height: 123px;" alt="Appvance" src="images/ptt_logo_tm.jpg"></span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+</div>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build A Test of a SOAP-based
+Web Service<br>
+With Fast and Easy Graphical Test Tools</h1>
+<br>
+<br>
+<br>
+<div style="text-align: left;">This
+article shows how to build a test in Appvance PerformanceCloud(APC) and Service Suite - Beta</a>
+in
+minutes. Working with WSDL has never been this fast and easy. This
+article&nbsp;shows the
+tremendous power to repurpose the test as a load and
+performance test and a business service monitor with no extra coding.<br>
+<br>
+Note: Find all of the code and data described in this article in tutorials/SOAP_Tutorial<br>
+<br>In this tutorial BrewBiz Inc. is
+a fictional beer manufacturer. BrewBiz provides its suppliers and vendors with a
+SOAP-based Web service interface to the inventory control system.
+BrewBiz provides its customers with a Web browser-based interface to
+search the product catalog and place orders. We will be using the
+SOAP/WSDL
+interface for this tutorial.<br>
+<br>
+<br>
+<br>
+<div style="text-align: center;"><img style="width: 559px; height: 331px;" alt="Test flow for BrewBiz" src="images/BrewBizFlow.png"><br>
+</div>
+<br>
+<br>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Tasks
+and Scenario</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li><a href="#task1">Build
+and run a functional
+test of the BrewBiz Web
+application.</a></li>
+  <li><a href="#task2">Run
+the test in a TestNode.</a></li>
+  <li><a href="#task3">Reuse
+the test as a
+data-driven test with a Data Production
+Library that reads data from a Comma-Separated-Value (CSV) file.</a></li>
+  <li><a href="#task4">Reuse
+the test as a load and
+performance test.</a></li>
+  <li><a href="#task5">Reuse
+the test as a business
+service monitor.<br>
+    <br>
+    </a></li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Test
+Use Case</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+A software quality tester needs to rapidly build a test of
+an ERP system. The tester follows these steps:</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Identify a list of products
+to add to the BrewBiz
+inventory.
+Create a Comma-Separated-Value (CSV) file to hold the product orders.
+Use a Appvance CSV Data Production Library (DPL) to enable the test
+to access the product orders at test runtime. Appvance DPLs are a
+powerful and rapid way to build data-driven tests.<br>
+    <br>
+  </li>
+  <li>Access a Web page to confirm
+that the products are in
+inventory.
+Use Service Suite to understand the services defined in a WSDL document for
+the SOAP interface. Use Service Suite to define a test suite and test case of
+the ERP
+system. When the test operates Appvance provides&nbsp;input
+parameters for&nbsp;the part number data and validation data to
+assert
+that the service responds with the correct response.</li>
+</ol>
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+all
+it should take you approximately 15 minutes to build and operate this
+test. The following sections show step-by-step instructions.</span><br>
+</div>
+</div>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Implementation</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Find all of the code and data described in this article in tutorials/SOAP_Tutorial</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">
+This tutorial uses the following file name conventions:<br>
+</span>
+<ul>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">soapUI
+project&nbsp;files end in .xml</span></li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">Test
+Scenario files end in .scenario</span></li>
+</ul>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task1"></a>Task
+1: Build A Functional Test Case From A WSDL Definition</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+this task we will build a functional test of an application that uses
+SOAP-based Web service interfaces.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Open Service Suite from the Start Screen of APC by clicking the Service Suite link.<br> <br>
+      <img style="border: 1px solid ; width: 1000px;" alt="Start a new soapUI project" src="images/AE-StartScreen.png"><br>
+
+    <br>
+  </li>
+  <li>From Service Suite, create a new
+project by clicking New WSDL Project command on the top navigation bar.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Start a new soapUI project" src="images/AE-ServiceSuite1.png"><br>
+    <br>
+    <br>
+Name the new project <span style="font-style: italic;">BrewBizService</span>.
+Type the following URL in the Initial WSDL text field <a href="http://<cloud_machine_name>:8080/BrewBizWeb/BrewBizService.wsdl">http://<cloud_machine_name>:8080/BrewBizWeb/BrewBizService.wsdl</a> and click OK.<br>
+    <br>
+  </li>
+  <li>Service Suite will open a new
+project in the Navigation tree. Click Request 1 to open the Request/Response editor
+panel.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Start a new soapUI project" src="images/AE-ServiceSuite2.png"><br>
+    <br>
+
+    <br>
+  </li>
+  <li>Test Request 1 by replacing
+the ? characters for your own
+values
+in the Request Editor panel. Enter product 1000, type AddProduct,
+quantity 50, and location 15. Then click the "Submit Request To The
+Endpoint" icon (a Play icon in the upper right corner of the
+Request Editor panel.) Note the service response appears in the
+Response panel.<br>
+    <br>
+  </li>
+  <li>Right-click Request 1 and
+choose Add To TestCase. <br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Create a TestSuite" src="images/AE-ServiceSuite3.png"><br>
+    <br>
+Enter "TestSuite" for the TestSuite name, "TestCase" as the TestCase
+name and "Request" for the TestRequest Name. Click OK to the Add Request To TestCase dialog.<br>
+    <br>
+  </li>
+  <li>Click on Save to Local on the top navigation bar, Select the directory and provide the File name, Click Save <br>
+    <br>
+  </li>
+  <li>Run the TestSuite. Right
+click on TestSuite in the
+navigation panel and click Run.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Successful run of the testsuite" src="images/AE-ServiceSuite4.png"><br>
+  </li>
+</ol>
+<br>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task2"></a>Task
+2: Run The Test In A TestNode</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+APC makes it easy to run a test in a
+distributed set of TestNodes. Appvance provides an easy-to-use
+central console that sends
+the test to one or more TestNodes. The TestNode operates the test.
+APC comes with an integrated ServiceSuite-soapUI ScriptRunner. The test makes
+requests </span><span style="font-family: Helvetica,Arial,sans-serif;">using SOAP protocols </span><span style="font-family: Helvetica,Arial,sans-serif;">to the application under test.
+The&nbsp;TestNode logs the time it takes for the application or
+service
+to
+respond and returns the transaction logs to the APC.</span><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center;"><img style="font-family: Helvetica,Arial,sans-serif; width: 444px; height: 323px;" alt="Appvance distributed test environment" src="images/nodefocus_soap.png"><br style="font-family: Helvetica,Arial,sans-serif;">
+</div>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+The APC identifies the operating parameters of a
+functional test, load and performance test, and business service
+monitor in a TestScenario document. Build and operate the TestScenario
+in the APC Scenario Builder. Find a TestScenario document already created
+for you in SOAP_Tutorial/BrewBiz_Functional_Test.scenario.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In APC, Click on Play button from the Start Screen, Use the Browse button. In the file dialog select tutorials/SOAP_Tutorial/<span style="font-family: Helvetica,Arial,sans-serif;">BrewBiz_Functional_Test.scenario</span><br>
+    <br>
+  </li>
+  <li>APC opens a new
+controller panel for the
+TestScenario. The
+controller panel includes icons to Play, Step, Edit and Cancel the test.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="soapUI controller" src="images/soap_functional.png"><br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+controller panel to view the
+source of the TestScenario document.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editing the TestScenario" src="images/editor_soap2.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Scenario Builder displays the
+TestScenario. Use the panels to view the parts
+of the TestScenario. For example, the TestScenario defines use of the ServiceSuite-soapUI test in the Use Cases panel.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editing the TestScenario use case" src="images/editor_usecase_soap.png"><br>
+    <br>
+The TestNodes panel tells APC to send the Service Suite
+recorded test to the
+TestNode(s)
+that will operate the test.<code></code><br>
+    <br>
+The UseCases panel tells APC to run a use case that runs the Service Suite
+test defined in BrewBizService-soapui-project.xml.<br>
+    <br>
+The Test Type panel tells APC that this is a functional test and to
+run the&nbsp;use case once.<br>
+    <br>
+  </li>
+  <li>That's
+all! Click the Appvance Run button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Showing results of running the test" src="images/run.png"><br>
+    <br>
+Functional tests run a test as a single user. APC displays
+check-marks next to each step of the soapUI test that operate
+successfully. APC shows the amount of time to operate the use
+case and each step in the soapUI test.<br>
+    <br>
+APC displays an X mark for a step that fails. Use the Options link -&gt; Output logs to view the logs to learn the cause of
+the failure. Click the Local TestNode Error and Local TestNode Output panels.<br>
+    <br>
+    <br>
+  </li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task3"></a>Task
+3: Make A Data-Driven
+Functional Test</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Task
+3 enhances the
+functional test of the BrewBiz service from Task 1 and 2 to use
+a Data
+Production Library (DPL.) The DPL used in this task reads data from a
+comma
+separated value (CSV) flat file. APC comes with many other DPLs.
+The values provide input to the test
+(id, password, product number for search) and&nbsp;validation data
+value.</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Create a
+Comma-Separated-Value file. Use your favorite text
+editor or spreadsheet program. Name the file data.csv. The contents
+must be in the following form.<br>
+    <br>
+    <img style="border: 1px solid ; width: 400px; height: 209px;" alt="Comma separated file (csv)" src="images/data.png"><br>
+    <span style="font-style: italic;"></span><br>
+    <br>
+  </li>
+  <li>Open Servcice Suite. Use the
+APC Start Screen -&gt; Service Suite link.<br>
+    <br>
+  </li>
+  <li>From Service Suite, Open the project which was created in Task 1 using the "Open from local" command from the top navigation bar.<br>
+    <br>
+  </li>
+  <li>soapUI will open a the
+project in the Navigation tree. This project
+already has a defined TestSuite, TestCase and a TestRequest.<br>
+    <br>
+  </li>
+  <li>Click on Created Request and Click on Load CSV at the bottom of the page and select the 'data.csv' file from the location "\tutorials\SOAP_Tutorial\data.csv" . <br>
+     <br>
+  </li>
+  <li>Click on the arrow button next to Options in the footer and select 'Data tab' - Now drag and drop the 
+  values form the Data tab to the Request panel, drag the value '1000' and drop it in row which says 'ProductNumber', 
+  Drag and Drop 'AddProduct' in the row which says 'Type', similarly for Quantity and Location and click on Submit to see the Results.<br>
+  Note: Drag and drop the dpl values inside the start of the tags. Eg: Inside <productNumber> tag
+    <br> <br>
+ 
+  </li>
+  <li>Lastly, notice that we added
+assertion to validate the
+response. A valid response
+from a SOAP request to the service will include the Product Number we
+sent in the request. To add an
+assertion, Right click on the create Request link. Click the Add Assertions, the Assertions panel will open.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Adding an assertion to check the response" src="images/AE-ServiceSuite6.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>&nbsp;Click the Add
+Assertion. Choose the PropertyContent. Click Contains Click OK.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Adding an assertion to check the response" src="images/AE-ServiceSuite7.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Provide the Assertion name and the Contents to validate against. Click OK<br>
+    <br>
+  </li>
+      <img style="border: 1px solid ; width: 1000px; " alt="Adding an assertion to check the response" src="images/AE-ServiceSuite8.png"><br>
+	  <br>
+
+  <li>Save the Project by clicking the 'Save to Local' command on the top navigation bar, Select the project from the Project Title drop down, Select the 
+  Directory where the project needs to be saved, provide the File Name and click Save.<br>
+     <br>
+ 
+  </li>
+
+  
+
+  <li>Finally, we need to connect the Data Production
+Library (DPL) to the Service Suite
+test.
+The
+test
+operates in the APC distributed test environment. Use the
+APC Scenario Builder to tell Appvance to get the CSV
+data file into a DPL and run the Service Suite
+test.<br>
+    <br>
+  </li>
+  <li>Use APC's Play Button from the Start Screen -&gt; Browse command to open the
+SOAPWSDLTest/BrewBiz_DataDriven.scenario.<br>
+    <br>
+  </li>
+  <li>In the Use Cases panel click the Add DPL link. Set
+the DPL type to HashDPL. HashDPL reads data from a comma separated
+value (CSV) file and provides it at test run time to the ScriptRunner.
+Set the Action to Get Next Row of Data.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editor showing data enabled used case" src="images/soap_datadriven.png"><br>
+    <br>
+    <span style="font-style: italic; font-family: Helvetica,Arial,sans-serif;">A
+quick explanation</span><span style="font-family: Helvetica,Arial,sans-serif;">:
+The TestScenario operates a functional test by running the Service Suite
+test once. The data file we created contains 11 rows of data. Change
+the repeat value to have APC repeat the test for each row of
+data in the Scenario Builder's Test Type panel for the TestScenario.<br>
+    </span><br>
+  </li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">That's
+all! Click the Appvance Play button from the Scenario Builder and watch the results.<br>
+    <br>
+    </span><img style="border: 1px solid ; width: 1000px; " alt="Successful operation of a data enabled test" src="images/soap_function_data.png"><br>
+    <br>
+  </li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task4"></a>Task
+4: Reuse A Functional Test
+As A Load And Performance Tests</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The
+test we built in Task 3 operated a functional test by a single user.
+Load and performance testing identifies the scalability index of a
+target host application by operating a test with multiple simultaneous
+concurrently running users. Appvance reuses functional tests as load
+and performance tests without requiring any change to the test.</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the APC Play button from the Start Screen -&gt; Browse command. Use the file selector to
+choose SOAPWSDLTests/BrewBiz_Load_Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  <li>Set the test to be a load
+test in the Test Type panel.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editor showing the General tab settings for a load test" src="images/soap_load.png"><br>
+   
+    <br>
+The settings tells APC to operate a load and performance test at
+three levels
+of concurrently running simulated users (crlevel.) The test operates 2
+users, then 4 users, and then 8 users.<br>
+  
+    <br>
+  </li>
+  <li>That's
+all! Click the Appvance Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Test results from a load test" src="images/soap_load_controller.png"><br>
+    <span style="font-weight: bold;"></span><br>
+    <br>
+Appvance operates the
+test in 1 concurrently running
+simulated
+users, then 2 users, then 4 users. The Real Time Scalability Index
+contrasts the Transaction Per Second (TPS) for each of the three user
+levels. A perfectly scalable system will increase TPS in linear
+proportion to the increase in users. For example, at 2 users doing 1.97
+TPS a 4 user level should be twice the TPS, or 3.95 TPS or higher. The
+above chart shows an application with linear
+scalability. The Step Times chart shows the amount of time each step
+took to operate as the test proceeded.<br>
+ 
+    <br>
+  </li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task5"></a>Task
+5: Reuse A Functional Test
+As A Business Service Monitor</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The
+test we built in Task 3 operated a functional test by a single user.
+Business Service Monitor testing enforces and proves a Service Level
+Agreement (SLA) by operating a test periodically. For example, a
+monitor runs a test every 30 minutes. Appvance reuses functional
+tests as a monitor without requiring any change to the test.</span><br>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the APC, Use the Play Button from the Start Screen -&gt; Browse command. Use the file selector to
+choose SOAPWSDLTests/BrewBiz_Monitor_Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  
+  <li>Set the test to be a Business Service Monitor
+test in the Test Type panel.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editor showing the General tab" src="images/soap_monitor_editor.png"><br>
+<br>
+The Scenario Builder defines this as a business service monitor. The monitor
+operates the test use case every 1 minute. The
+monitor keeps running until it encounters an exception.<br>
+    <br>
+  </li>
+
+  <li>That's
+all! Click the Appvance Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Monitor running the test" src="images/soap_monitor_controller.png"></li>
+</ol>
+
+<br>
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 91px; height: 39px;" alt="" src="images/ptt_logo_tm_yellow.jpg" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a
+commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

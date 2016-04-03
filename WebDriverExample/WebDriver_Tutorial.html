@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance PerformanceCloud (APC) Examples - WebDriver Selenium 2 Example</title></head><body>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 255px; height: 103px;" alt="Appvance" src="images/ptt_logo_tm.jpg"><br>
+</div>
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build A Test of a Web App<br>
+Using Selenium 2 WebDriver<br>
+</h1>
+<h2>The APC WebDriver Tutorial</h2>
+</div>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;">This is
+an
+example of using WebDriver (Selenium 2) to run a functional test of a
+Web application. Please follow these instructions.<br>
+</span><br>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Note: Find all
+of the code and data described in this article in
+tutorials/WebDriverExample or download a Zip archive at
+<a href="http://pttdownloads.s3.amazonaws.com/WebDriverExample/WebDriverExample.zip">http://pttdownloads.s3.amazonaws.com/WebDriverExample/WebDriverExample.zip</a><br>
+<br>
+- BrewBizWeb is a Web 1.0 tutorial application that comes with
+APC. It runs in the same Jetty app server instance that runs the
+TestNode. Access it while APC is up and running at
+<a href="http://cloud_machine_name:8080/BrewBizWeb/login.html">http://Cloud_machine_name:8080/BrewBizWeb/login.html</a><br>
+<br>
+- WebDriverExample has a directory structure<br>
+<br>
+<img style="width: 1000px;" alt="Directory structure for the example" src="images/directory-structure.png"><br>
+<br>
+This is a NetBeans project. It is easily moved into an Eclipse project.
+build contains the built classes for the test. src contains the test in
+TestCase1.java. build.xml is an Ant script; jar is a target in the Ant
+script to build dist/WebDriverExample.jar. lib contains copies of the
+seleniumrc and tool bundles. We copied these from the APC
+installation Appvance_home/TestNode/bundles. We added the bundles' jar
+files to the class path of the NetBeans project to allow the Ant script
+to build TestCase1.java with the bundles' jar dependencies.<br>
+<br>
+All of the above should be normal and familiar to you as a Java
+developer. If it is not, then let Appvance know and we will provide
+you with training.<br>
+<br>
+- WebDriverExample.jar contains the compiled TestCase1 class:<br>
+<br>
+package com.Appvance.examples;<br>
+<br>
+import org.openqa.selenium.WebDriver;<br>
+import org.openqa.selenium.firefox.FirefoxDriver;<br>
+import org.openqa.selenium.By;<br>
+import com.Appvance.tool.PTTStepListener;<br>
+<br>
+public class TestCase1 {<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp; public void runTest() throws Exception<br>
+&nbsp;&nbsp;&nbsp; {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+PTTStepListener.startStep("Initializing FirefoxDriver");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WebDriver d1 = (WebDriver)
+new FirefoxDriver();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.endStep();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . . .<br>
+<br>
+- runTest() initializes WebDriver to use the local instance of Firefox.
+WebDriver comes with support for Chrome, IE, and others. See the
+WebDriver API documentation at
+http://seleniumhq.org/docs/03_webdriver.html#introducing-the-selenium-webdriver-api-by-example<br>
+<br>
+- I embelleshed the TestCase1 code to include APC custom user
+logging: PTTStepListener.startStep("Initializing FirefoxDriver") and
+PTTStepListener.endStep(); This lets APC keep track of each task
+within the runTest() method. APC tracks the duration and
+pass/fail success of each step in the Results Repository database. The
+results appear when you run the test in APC:<br>
+<br>
+<img style="border: 1px solid ; width: 1000px;" alt="Appvance Enterprise Controller window showing successful operation of the WebDriver functional test" src="images/WebDriver-example-run.png"><br>
+<br>
+<br>
+- To run the test, in APC use the Play Button from the Start Screen -&gt; Browse command. Select
+WebDriverExample/WebDriver_Example.scenario. Click the Run icon in the
+upper right corner.<br>
+<br>
+- View the contents of WebDriver_Example.scenario in the APC
+Scenario Builder. With the scenario open, click the Edit button in the upper
+right corner of the Controller window. The Scenario Builder appears in a browser
+window.<br>
+<br>
+<img style="border: 1px solid ; width: 1000px;" alt="Appvance Enterprise Editor displaying contents of the scenario" src="images/Webdriver-Editor.png"><br>
+<br>
+Click the buttons on the right, or scroll, to navigate to a part of the
+scenario. For example, the Use Case panel shows how APC
+instantiates the TestCase1 object and calls the runTest() method.<br>
+<br>
+<img style="border: 1px solid ; width: 1000px;" alt="Appvance Enterprise Editor showing Use Case settings to call the test" src="images/UseCase-Editor.png"><br>
+<br>
+Test Type is Java. The scenario defines the Class and Method to call.
+Instance is a name for the instance of the TestCase1 object. Instance
+is similar to:<br>
+<br>
+TestCase1 myinstance = new TestCase1()<br>
+<br>
+The jar file is identified in the JAR pop-up (click Browse to select a
+different JAR.) APC identifies the JAR file in the Resources
+panel:<br>
+<br>
+<img style="border: 1px solid ; width: 1000px;" alt="Appvance Enterprise Editor showing Bundles and Resources" src="images/Resources-panel.png"><br>
+<br>
+Anything in the Resource list is sent over to the TestNode when you run
+the test. APC adds WebDriverExample.jar to the TestNode's class
+path automatically. The JAR files in a bundle already exist in the
+TestNode. Bundles identify which bundles to use. This is APC's
+way to avoid classpath hell. {scenario} tells APC to find the JAR
+file relative to the path of the scenario file.<br>
+<br>
+- Data Enabling these tests is easy and powerful using APC Data
+Production Libraries (DPLs). When you want to add input values to the
+runTest() method, use the Add Argument function. For example, TestCase1
+also defines a runTestWithArgs() method:<br>
+<br>
+&nbsp;&nbsp;&nbsp; public void testMethodWithArgs( String theURL )
+throws Exception<br>
+<br>
+Call this in APC by clicking Add Argument:<br>
+<br>
+<img style="border: 1px solid ; width: 544px; height: 302px;" alt="Appvance Enterprise Editor showing how to send arguments to a test method" src="images/DPL-example.jpg"><br>
+<br>
+To supply data from a comma separated value (CSV) file or the results
+of a RDBMS query, use the Add DPL command.<br>
+<br>
+<img style="border: 1px solid ; width: 543px; height: 397px;" alt="Appvance Enterprise Editor showing how to use csv data in a test" src="images/CSV-DPL-example.jpg"><br>
+<br>
+For example, TestCase1 also defines a runTestWithDPL() method:<br>
+<br>
+myGuidValue = (String) ( (HashMap) DPLValues ).get( "myValue" );<br>
+<br>
+The CSV file needs to have a set of mapping names in the first row. For
+example,<br>
+<br>
+myValue, favorite<br>
+Frank, chocolate<br>
+Heather, tacos<br>
+<br>
+- As APC operates the test, the right middle panel Transactions
+tab shows the most recent transaction details. Click on a row in the
+Transactions list to view the details: Output message, error failure
+(exception) message, request and response values, and any custom user
+log messages. Click the Error tab to see a stack trace message from the
+test use case. Click the Response tab to see the response received from
+the server.<br>
+<br>
+- When you run this example APC and the TestNode run on the same
+local machine. In a production environment the TestNode runs on a
+remote machine. A continuous integration environment, such as Jenkins,
+runs the test by making a service call to APC following the
+instructions in a TestScenario.<br>
+<br>
+- WebDriver_Example.scenario is a APC TestScenario. This has all
+the instructions APC needs to send the WebDriverExample.jar over
+to the TestNode, instantiate TestCase1, and call the runTest() method.<br>
+<br>
+- The example uses a new WebDriver Bundle. APC Bundle's add new
+functions to the TestNode. The
+bundle comes with APC.&nbsp; After you copy the WebDriver
+Bundle, the directory structure looks like this:<br>
+<br>
+<img style="border: 1px solid ; width: 1000px; " alt="Directory structure of a Appvance Enterprise TestNode with the WebDriver bundle installed" src="images/directory-structure.png"><br>
+<br>
+If you do not install the seleniumrc/2.25 bundle in the correct
+location, APC will not run the test.<br>
+<br>We hope this explains using WebDriver for functional testing.
+Repurposing this to a performance, load, or stress test is easy. Look
+at the Web_Test_Tutorial for help.<br>
+<br>Please <a href="http://www.appvance.com/contacts/">let us know</a> your experience with all of this. Thanks!<br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 91px; height: 39px;" alt="" src="images/ptt_logo_tm_yellow.jpg" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a
+commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

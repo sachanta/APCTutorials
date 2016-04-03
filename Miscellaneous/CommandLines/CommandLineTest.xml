@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+PushToTest(tm) Test Scenario for a functional test
+
+PushToTest is the open-source SOA governance and test automation platform
+For technical support, documentation, and help see http://www.pushtotest.com
+-->
+
+<testscenario xmlns="www.pushtotest.com/tm5" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="www.pushtotest.com/XSD/testscenario.xsd" 
+  version="2.0">
+  
+  <basics>
+    <name>Command Line Functional Test</name>
+    <defaultdirectory>.</defaultdirectory>
+  </basics>
+
+  <!-- TestNode locations to run this test -->
+  <testnodes>
+    <node name="localhost" location="http://localhost:8080/TestNetwork/ws/TestNode"/>
+  </testnodes>
+
+  <!-- Dynamically loaded jar files and other resources -->
+  
+  <functionaltest repeat="1">
+    <testusecase>
+      <dimensions>
+        <usecases>
+          <usecase name="CommandLine_usecase">
+            <sequence name="CommandLine_sequence" proportion="100">
+              <test>
+		        <run name="OSCommandSetup" command="cmd" langtype="commandline" instance="OS" >
+                  <argument name="arg" value="/c"/>
+                  <argument name="arg" value="dir"/>
+				</run>
+              </test>
+            </sequence>
+          </usecase>
+        </usecases>
+      </dimensions>
+    </testusecase>
+  </functionaltest>
+
+  <!-- Observe and report from resource monitors on the TestNodes and the target host -->
+  <monitoring enablednodes="false" enabledtarget="false" targethost="uri-to-host" />
+        
+  <!-- Results logging settings -->
+  <logs summaryreport="true" showsummary="false"/>
+
+  <!-- Settings for this test scenario -->
+  <options>
+    <testTime time="60000"/>
+    <sleeptime>0</sleeptime>
+    <delayBetweenStartingUseCases time="1000"/>
+    <delayBetweenTestCases time="100"/>
+  </options>
+</testscenario>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="BrewBizService" soapui-version="3.5.1" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="TestSuite" value="TestSuite"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Export JUnit Results" value="false"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="TestRunner Path" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Export All" value="false"/>
+  <con:entry key="TestCase" value="&lt;all>"/>
+  <con:entry key="Print Report" value="false"/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Endpoint" value=""/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Save Project" value="false"/>
+  <con:entry key="Add Settings" value="false"/>
+</xml-fragment>]]></con:setting></con:settings><con:interface name="BrewBizServiceSoapBinding" bindingName="{http://localhost:8080/axis/services/BrewBizService}BrewBizServiceSoapBinding" soapVersion="1_1" definition="http://localhost:8080/BrewBizWeb/BrewBizService.wsdl" xsi:type="con:WsdlInterface" wsaVersion="NONE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:endpoints><con:endpoint>http://localhost:8080/axis/services/BrewBizService</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="Change_Price" bindingOperationName="Change_Price" inputName="Change_PriceRequest" outputName="Change_PriceResponse" receivesAttachments="false" sendsAttachments="false" type="Request-Response"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/axis/services/BrewBizService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:exam="http://examples.pushtotest.com">
+   <soapenv:Header/>
+   <soapenv:Body><exam:Change_Price>
+         <ProductNumber>1000</ProductNumber>
+         <Type>AddProduct</Type>
+         <Quantity>420</Quantity>
+         <Location>11</Location>
+      </exam:Change_Price>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Confirm_Price" bindingOperationName="Confirm_Price" inputName="Confirm_PriceRequest" outputName="Confirm_PriceResponse" receivesAttachments="false" sendsAttachments="false" type="Request-Response"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/axis/services/BrewBizService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:exam="http://examples.pushtotest.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <exam:Confirm_Price>?</exam:Confirm_Price>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request></con:call></con:operation><con:definitionCache rootPart="http://localhost:8080/BrewBizWeb/BrewBizService.wsdl" type="TEXT"><con:part><con:url>http://localhost:8080/BrewBizWeb/BrewBizService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://localhost:8080/axis/services/BrewBizService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://localhost:8080/axis/services/BrewBizService" xmlns:intf="http://localhost:8080/axis/services/BrewBizService" xmlns:tns1="http://examples.pushtotest.com" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDL created by Apache Axis version: 1.3
+Built on Oct 05, 2005 (05:23:37 EDT)-->
+  <wsdl:types>
+    <schema targetNamespace="http://examples.pushtotest.com" xmlns="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="Change_Price">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ProductNumber" type="xsd:integer"/>
+            <xsd:element name="Type" type="xsd:string"/>
+            <xsd:element name="Quantity" type="xsd:integer"/>
+            <xsd:element name="Location" type="xsd:integer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <element name="Confirm_Price" type="xsd:anyType"/>
+    </schema>
+    <schema targetNamespace="http://localhost:8080/axis/services/BrewBizService" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="Change_PriceReturn" type="xsd:anyType"/>
+      <element name="Confirm_PriceReturn" type="xsd:anyType"/>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="Confirm_PriceResponse">
+    <wsdl:part element="impl:Confirm_PriceReturn" name="Confirm_PriceReturn"/>
+  </wsdl:message>
+  <wsdl:message name="Confirm_PriceRequest">
+    <wsdl:part element="tns1:Confirm_Price" name="part"/>
+  </wsdl:message>
+  <wsdl:message name="Change_PriceRequest">
+    <wsdl:part element="tns1:Change_Price" name="part"/>
+  </wsdl:message>
+  <wsdl:message name="Change_PriceResponse">
+    <wsdl:part element="impl:Change_PriceReturn" name="Change_PriceReturn"/>
+  </wsdl:message>
+  <wsdl:portType name="BrewBizService">
+    <wsdl:operation name="Change_Price">
+      <wsdl:input message="impl:Change_PriceRequest" name="Change_PriceRequest"/>
+      <wsdl:output message="impl:Change_PriceResponse" name="Change_PriceResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="Confirm_Price">
+      <wsdl:input message="impl:Confirm_PriceRequest" name="Confirm_PriceRequest"/>
+      <wsdl:output message="impl:Confirm_PriceResponse" name="Confirm_PriceResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BrewBizServiceSoapBinding" type="impl:BrewBizService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Change_Price">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="Change_PriceRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="Change_PriceResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Confirm_Price">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="Confirm_PriceRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="Confirm_PriceResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BrewBizServiceService">
+    <wsdl:port binding="impl:BrewBizServiceSoapBinding" name="BrewBizService">
+      <wsdlsoap:address location="http://localhost:8080/axis/services/BrewBizService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache></con:interface><con:testSuite name="TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="TestCase" searchProperties="true" id="3389611f-3abf-4e44-9981-815e85ee2f9e" maxResults="0"><con:settings/><con:testStep type="request" name="Change_Price - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BrewBizServiceSoapBinding</con:interface><con:operation>Change_Price</con:operation><con:request name="Change_Price - Request 1" outgoingWss="" incomingWss="" wssPasswordType=""><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/axis/services/BrewBizService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:exam="http://examples.pushtotest.com">
+   <soapenv:Header/>
+   <soapenv:Body><exam:Change_Price>
+         <ProductNumber>1000</ProductNumber>
+         <Type>422</Type>
+         <Quantity>55</Quantity>
+         <Location>12</Location>
+      </exam:Change_Price>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:properties/><con:reportParameters/></con:testSuite><con:properties/><con:wssContainer/><con:databaseConnectionContainer/><con:reporting><con:xmlTemplates/><con:parameters/></con:reporting></con:soapui-project>

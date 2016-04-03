@@ -1,0 +1,85 @@
+<testcase name='UntitledTestObject' description='' author='' version=''>
+
+<metainfo>
+</metainfo>
+
+<dpl filename="" exectype="" errorhandling=""/>
+<object-repository nodeJson=''>
+</object-repository>
+
+<step action="navigateTo" value="&quot;http://localhost:8080/BrewBizWeb/contactus.html&quot;" type="web" sequence="0">
+	<dialect type="sahi">
+		<accessor type="navigateTo" value='' selected="true"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value='' selected="true"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;Carol Crofts&quot;" type="web" sequence="1">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;id&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;id&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.id&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='id']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[0]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;carol@pushtotest.com&quot;" type="web" sequence="2">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;Email&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(1)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;Email&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.Email&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='Email']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[1]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[3]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;GUID-100-123&quot;" type="web" sequence="3">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;Message&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(2)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;Message&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.Message&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='Message']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[2]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[4]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="click" value='' type="web" sequence="4">
+	<dialect type="sahi">
+		<accessor type="click" value="submit(&quot;Send&quot;)" selected="true"/>
+		<accessor type="click" value="submit(&quot;docontact&quot;)" selected="false"/>
+		<accessor type="click" value="submit(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;docontact&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.docontact&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='docontact']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[3]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[5]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+</testcase>

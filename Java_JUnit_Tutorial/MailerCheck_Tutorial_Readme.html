@@ -1,0 +1,419 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance Examples: Java DPL Monitor Example</title></head><body>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center;"><img style="width: 284px; height: 107px;" alt="Appvance" src="images/ptt_logo_tm.jpg"><br style="font-family: Helvetica,Arial,sans-serif;">
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build A Service Monitor Using Java Unit Tests<br>
+In 30 Minutes Or Less.</h1>
+<br>
+<br>
+<div style="text-align: left;">This tutorial shows how to use
+Java-based JUnit test classes to automate a business service monitor of
+a Web-based email service. The monitor uses Appvance PerformanceCloud's (APC) TheLocker Data
+Production Library (DPL) to share data between the unit tests.<br>
+<br>
+<span style="font-style: italic;">
+Note: Find all of the code and data described in this article in tutorials/Java_JUnit_Tutorial</span><br>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Use Case</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+Appvance hosts a contact form on the Appvance.com Web site for
+visitors to contact the site administrator with feedback and questions.
+This following chart illustrates the steps this service monitor follows
+to verify the contact form works correctly.<br>
+<br>
+<div style="text-align: center;"><img style="width: 722px; height: 111px;" alt="Multistep use case to send email and verify the message was received." src="images/UseCase.png"><br>
+</div>
+<br>
+First the monitor creates a globally unique identity (GUID) value by
+using a simple and effective <a href="http://javaexchange.com/aboutRandomGUID.html">GUID creation class</a>
+written
+by Marc A. Mnich. The monitor puts this unique value into the
+subject line of the contact form and clicks the submit button. The
+Appvance.com service sends an email message to the site administrator.<br>
+<br>
+After operating the contact form, the monitor waits 30 seconds. Then
+the
+monitor logs-into the Web front-end to an email service and asserts
+that the email service received a message containing the GUID. If no
+message contains the GUID the monitor logs this as a failure. The
+monitor sleeps for 30 minutes and then repeats the check until an
+operator stops the monitor.<br>
+<br>
+</div>
+</div>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Tasks</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+This tutorial uses the following steps to build the service monitor:</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li><a href="#task1">Record a unit test to operate
+the Contact Form</a></li>
+  <li><a href="#task2">Record a unit test to operate
+a Web-based Email Service</a></li><li><a href="#task3">Add a Data Production Library
+to data-enable the unit test classes</a></li>
+  <li><a href="#task4">Operate the unit tests as a
+Business Service Monitor</a></li>
+</ol>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Implementation</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+admiration to all good television cooking shows, this tutorial
+comes
+will a completed implementation of the service monitor. Please find the
+files a Appvance Enterprise installation under the tutorials/Java_JUnit_Tutorial
+directory.&nbsp;See
+the
+following files for the implementation:</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<table style="font-family: Helvetica,Arial,sans-serif; width: 550px; height: 244px; text-align: left; margin-left: auto; margin-right: auto;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 204, 255);">File
+or Directory</td>
+      <td style="background-color: rgb(153, 204, 255);">Description<img style="width: 500px; height: 1px;" alt="" src="images/blank.gif"></td>
+    </tr>
+    <tr>
+      <td>MailerCheck_Tutorial_Readme.html<br>
+      </td>
+      <td>This tutorial document.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">src</td>
+      <td>Java source code to the unit tests.</td>
+    </tr>
+    <tr>
+      <td>scripts</td>
+      <td>Recorded tests in Selenese format.</td>
+    </tr>
+    <tr>
+      <td>lib</td>
+      <td>Compiled utility classes to support unit test classes.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: middle;">MailerCheck_MonitorTestScenario.scenario</td>
+      <td style="vertical-align: top;">APC TestScenario for the
+service monitor.</td>
+    </tr>
+    <tr>
+      <td>build.xml</td>
+      <td>Ant build script to compile the unit test classes.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+<br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task1"></a>Task
+1:&nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;">Record
+A Unit Test To Operate the Contact Form</span><span style="font-weight: bold;"></span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+this task we will create a test object that operates the
+contact form on the Appvance Web site.<br>
+<br>
+<span style="font-style: italic;">Please note: Task 1 and 2 use Designer fo</span><span style="font-style: italic;">Record/Playback of
+test scripts. If you are more comfortable with writing Java code, then skip
+ahead to
+Task 3.</span><br style="font-style: italic;">
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>From the APC Start Screen, Click Designer link from the expert suite.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Designer tool for Record/Playback of a Web application" src="images/Designer2.png"><br>
+    <br>
+</li>
+  <li>Click record. Choose a browser. This tutorial shows using Firefox to record the test.<br>
+    <br>
+  </li>
+
+  <li>Enter <a href="http://<cloud_machine_name>:8080/BrewBizWeb/contactus.html">http://<cloud_machine_name>:8080/BrewBizWeb/contactus.html</a> as the Starting URL.<br>
+ <br>
+    <img style="border: 1px solid ; width: 327px; height: 197px;" alt="Contact-us Web form" src="images/contactus.png"><br>
+<br>
+  </li>
+  <li>Fill out the form and click the Send button. Set the
+Subject of the form to contain a unique value (a Globally Unique ID or
+GUID.) For example, type GUID-100-123. In Task 2 we will write a test to confirm the presence of the
+GUID in the messages we receive from the contact form.<br>
+    <br>
+</li>
+  <li>Click End Recording in the Designer window.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Contact-us Web form" src="images/Designer2_send.png"><br>
+    <br>
+  </li>
+
+  <li>Use the Designer Save command. Name the file SendEmail.ds<br>
+    <br>
+</li>
+  <li>Use the Designer Export Button As Command. Choose Java-Selenium-RC-jUnit from the submenu. Name the file SendEmail.java<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Export window showing Java class" src="images/Designer_export2.png"><br>
+    <br>
+  </li>
+
+  
+</ol>
+
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task2"></a>Task
+2:&nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;">Record
+A Unit Test To Operate a Web-based Email Service</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Record a test
+using Designer of a Web-based email service. </span><ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Open Designer from the Start Screen. Name this object CheckEmail.<br>
+    <br>
+  </li>
+  <li>Click record. Choose a browser. This tutorial shows using Firefox to record the test.<br>
+    <br>
+  </li>
+  <li>Enter <a href="http://<cloud_machine_name>:8080/BrewBizWeb/inbox.html">http://<cloud_machine_name>:8080/BrewBizWeb/inbox.html</a> as the Starting URL.<br>
+ <br>
+    <img style="border: 1px solid ; width: 549px; height: 160px;" alt="Email inbox" src="images/inbox.jpg"><br>
+<br>
+  </li>
+  <li>Fill out the form and click the Send button. Set the
+Subject of the form to contain a unique value (a Globally Unique ID or
+GUID.) For example, type GUID-100-123. In Task 2 we will write a test to confirm the presence of the
+GUID in the messages we receive from the contact form.<br>
+    <br>
+  </li>
+  <li>Click End Recording in the Designer window.<br>
+    <br>
+  </li>
+  <li>Use the Designer Save command. Name the file CheckEmail.ds<br>
+  <br>
+  </li>
+  <li>Use the Designer Export button As command in the File menu. Choose Java-Selenium-RC-jUnit from the submenu. Name the file SendEmail.java<br>
+    <br>
+  </li>
+  <li>Add the SendMail.java and CheckMail.java to an Java application
+project using your favorite IDE or build environment. We created the
+Tutorial files using <a href="http://www.netbeans.org">NetBeans</a>. The included ANT build script
+compiles the Java&nbsp; classes and packages them into a JAR file. From
+the
+command-line, execute: ant jar. The ANT script puts the compiled
+monitor check resources into dist/MailerCheck.jar</li>
+</ol>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task3"></a>Task 3: </span><span style="font-family: Helvetica,Arial,sans-serif;">Data-enable
+the Unit Tests.</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The
+unit tests we built in the previous tasks operate a functional test as
+a
+single user and always use the hard-coded GUID value we typed-in.
+In this step we will modify the SendEmail.java and CheckEmail.java
+classes to use dynamically created GUID values. Additionally, we will
+use TheLocker Data Production Library (DPL) to share the GUID between
+these&nbsp;unit tests.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Edit the SendEmail.java file setUp method. Add the following
+objects to the class definition:<br>
+    <br>
+    <code>&nbsp;&nbsp;&nbsp; SeleniumHTMLUnit selenium;<br>
+&nbsp;&nbsp;&nbsp; RandomGUID myguid = new RandomGUID(false);<br>
+    </code><code>&nbsp;&nbsp;&nbsp; String myGuidValue = "";</code><br>
+    <code>&nbsp;&nbsp;&nbsp; TheLocker loc = new TheLocker();<br>
+    </code><br>
+SeleniumHTMLUnit is a APC class that implements the Selense
+language in a Java package. We will use an instance of this object to
+interact with the Web-based contact form from Task 1.<br>
+    <br>
+RandomGUID is a utility class APC provides to generate GUID
+values.<br>
+    <br>
+TheLocker is a APC provoided DPL. We use TheLocker to
+share the GUID with the CheckEmail unit test. TheLocker is a singleton.
+It
+maintains a list of thread safe HashMaps to store and retrieve data.
+TheLocker is thread safe for use in a load and performance test by
+multiple concurrently running simulated users (threads.) In this
+tutorial we use TheLocker as a simple HashMap to share the GUID value
+between unit test objects. Task 4 shows how a TestScenario definition
+of TheLocker shares the HashMap between unit tests.<br>
+    <br>
+  </li>
+  <li>Edit the runTest method as follows:<br>
+    <br>
+    <code>&nbsp;&nbsp;&nbsp; &nbsp;selenium.type( "subject",
+"MailerCheck" + myGuidValue );<br>
+    </code><br>
+The above code sets the subject line of the form to the GUID value.<br>
+    <br>
+    <br>
+  </li>
+  <li>Add a sleep() method as follows:<br>
+    <br>
+    <code>&nbsp;&nbsp;&nbsp; public void sleep( String seconds ) throws
+java.lang.InterruptedException<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( seconds != null )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Thread.sleep( Integer.parseInt( seconds ) );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; }<br>
+    </code><br>
+We will use the sleep method to pause the test after the monitor
+operates the SendEmail unit test.<br>
+    <br>
+    <br>
+  </li>
+  <li>Edit the CheckEmail.java file runTest method as follows:<br>
+    <br>
+    <code>&nbsp;&nbsp;&nbsp; public void runTest( Object DPLValues,
+String id, String passwd ) throws Exception<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String myGuidValue = "";<br>
+    <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( ( id==null ) || (
+passwd == null ) )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+throw new Exception( "Input parameters invalid." );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( DPLValues != null )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; if ( DPLValues
+instanceof HashMap )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+myGuidValue = (String) ( (HashMap) DPLValues ).get( "GUID" );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    </code><br>
+The above changes enable TheLocker DPL to share the GUID value between
+the SendEmail.java and&nbsp;CheckEmail.java unit tests.<br>
+    <br>
+  </li>
+  <li>Edit the runTest method as follows:<br>
+    <br>
+    <code>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+selenium.assertTextPresent( myGuidValue );<br>
+    </code><br>
+The above change checks the DPL provided GUID value from the
+SendEmail.java unit test.<br>
+    <br>
+  </li>
+  <li>The SendEmail and CheckEmail unit tests are ready to operate. For
+debugging sake, you may find it handy to write a main() method and
+evaluate these unit tests from the Java command-line. In Task 5 we run
+these unit
+tests in APC as a service monitor.<br>
+    <br>
+  </li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task4"></a>Task 4: &nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;">Operate
+The Unit Tests in a Business Service Monitor</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The previous
+tasks built a functional test of the Appvance Web site contact form.
+APC Business Service Monitor&nbsp;enforces and proves a
+Service Level
+Agreement (SLA) by operating a test periodically. For example, we will
+configure this
+monitor to operate the use case every 30 minutes.<br>
+<br>
+Appvance operates the unit tests as a monitor without requiring any
+change to the unit tests. APC asks for only 5 lines orchestration
+instructions in a TestScenario document!</span><br>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In APC use the Play button from the Start Screen -&gt; Browse command to open
+MailerCheck/MailerCheck_Monitor.scenario.
+The
+TestScenario appears in new Controller window.<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the TestScenario Controller window. The
+TestScenario appears in the Scenario Builder window. The Test Type tab shows
+APC runs the test use case every 10 minutes.<br>
+<br>
+  </li>
+  <li>Click the Use Cases tab.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Business Service Monitor (BSM)" src="images/Editor_java.png"><br>
+    <br>
+    <br>
+The use case identifies TheLocker Data Production Library (DPL.)<br>
+    <br>
+  </li>
+  <li>The use case defines the first step: run the SendEmail unit test.
+The monitor runs the setUp
+method. The instance attribute tells the monitor to use the same
+instance when it operates the runTest method.<br>
+<br>
+  </li>
+  <li>The runTest method stores the GUID value into TheLocker for later
+use by the CheckEmail runTest method.<br>
+    <br>
+    <code></code></li>
+  <li>The above sleep method pauses the monitor for 30 seconds. Then
+we're ready to see if the email service received the message.<br>
+<br>
+  </li>
+  <li>The above code runs CheckEmail unit test's&nbsp;setUp method. The
+instance attribute tells the monitor to use the same instance when it
+operates the runTest method.<br>
+<br>
+  </li>
+  <li>The runTest method receives three attributes: TheLocker
+containing the
+GUID value, the id and the password to sign-in to the email service.<br>
+    <br>
+Note: Please update the id and password values to reflect your
+GMail.com account settings.<br>
+    <br>
+  </li>
+  <li>That's
+all! Click the Appvance Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Business Service Monitor (BSM)" src="images/Monitor_java.png"><br>
+  </li>
+</ol>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 97px; height: 41px;" alt="" src="images/ptt_logo_trademark_45_trans.png" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a
+commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

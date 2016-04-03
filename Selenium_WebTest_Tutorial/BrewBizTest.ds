@@ -1,0 +1,135 @@
+<testcase name='BrewBizTest' description='' author='' version=''>
+
+<metainfo>
+</metainfo>
+
+<dpl filename="" exectype="" errorhandling=""/>
+<object-repository nodeJson=''>
+</object-repository>
+
+<step action="navigateTo" value="&quot;http://localhost:8080/BrewBizWeb/login.html&quot;" type="web" sequence="0">
+	<dialect type="sahi">
+		<accessor type="navigateTo" value='' selected="true"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value='' selected="true"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;bet&quot;" type="web" sequence="1">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;id&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;id&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.id&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='id']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[0]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;biz&quot;" type="web" sequence="2">
+	<dialect type="sahi">
+		<accessor type="setValue" value="password(&quot;Password&quot;)" selected="true"/>
+		<accessor type="setValue" value="password(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;Password&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.Password&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='Password']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[1]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[3]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;bert&quot;" type="web" sequence="3">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;id&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;id&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.id&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='id']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[0]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="click" value='' type="web" sequence="4">
+	<dialect type="sahi">
+		<accessor type="click" value="submit(&quot;Log-in&quot;)" selected="true"/>
+		<accessor type="click" value="submit(&quot;dologin&quot;)" selected="false"/>
+		<accessor type="click" value="submit(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;dologin&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.loginform.dologin&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='dologin']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.loginform.elements[2]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[4]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;1200&quot;" type="web" sequence="5">
+	<dialect type="sahi">
+		<accessor type="setValue" value="textbox(&quot;searchvalue&quot;)" selected="true"/>
+		<accessor type="setValue" value="textbox(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;searchvalue&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.searchform.searchvalue&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='searchvalue']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.searchform.elements[0]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="click" value='' type="web" sequence="6">
+	<dialect type="sahi">
+		<accessor type="click" value="submit(&quot;Search&quot;)" selected="true"/>
+		<accessor type="click" value="submit(&quot;dosearch&quot;)" selected="false"/>
+		<accessor type="click" value="submit(0)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;dosearch&quot;" selected="true"/>
+		<accessor attribute='' value="&quot;document.searchform.dosearch&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//input[@name='dosearch']&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;document.searchform.elements[2]&quot;" selected="false"/>
+		<accessor attribute='' value="&quot;//tr[3]/td[2]/input&quot;" selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="assertExists" value='' type="web" sequence="7">
+	<dialect type="sahi">
+		<accessor type="assertExists" value="cell(&quot;1200&quot;)" selected="false"/>
+		<accessor type="assertExists" value="row(&quot;1200 200 12 130 104 78&quot;)" selected="false"/>
+		<accessor type="assertExists" value="row(2)" selected="false"/>
+		<accessor type="assertExists" value="table(1)" selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value="&quot;//tr[2]/td[1]&quot;" selected="true"/>
+	</dialect>
+	<dialect type="flextesting">
+		<accessor type="assertExists" attribute='' value='' selected="false"/>
+	</dialect>
+</step>
+
+
+</testcase>

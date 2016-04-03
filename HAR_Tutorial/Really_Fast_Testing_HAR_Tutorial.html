@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance Tutorial on Web Application Optimization with HAR Technology</title></head><body>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 268px; height: 115px;" alt="Appvance" src="images/ptt_logo_tm.jpg"><br>
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build Really Fast Web Application Tests<br>
+with HTTP Archive (HAR) Technology </h1>
+<br>
+<br>
+<div style="text-align: left;">This
+article shows how to build, operate, and learn the results from a test
+of a Web application very quickly using HTTP
+Archive</a> (HAR) technology.<br>
+<br>
+Appvance PerformanceCloud(APC) uses HAR to surface functional issues, load and performance
+bottlenecks, and surface Web application delivery SLA compliance
+issues.&nbsp;HAR is a simple file notation to identify the resources
+a browser uses to display a Web page. HAR files first appeared in the <a href="http://getfirebug.com/">Firebug</a> debugger utility for the <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a> browser. HAR is now supported in <a href="http://blogs.msdn.com/b/ie/archive/2010/04/22/ie9-developer-tools-network-tab.aspx">Internet Explorer</a> (IE 9) and <a href="http://www.softwareishard.com/blog/har-adopters/">many other tools</a>.<br>
+<br>
+APC automates a HAR file for a Web page as a functional test,
+load and performance test, and production monitor. Create a HAR file
+using the popular Firebug debugger utility for Firefox, or another <a href="http://www.softwareishard.com/blog/har-adopters/">HAR supporting tool</a>. APC
+operates an HTTP protocol-level test using the HAR file as input to a
+test. APC loads the resources for a Web page just as the browser
+does, in pools of concurrently running HTTP protocol connections.
+APC shows the test operation - including drill-down on how long
+each resource in the page takes to load - using the APC Results
+Analysis charting and reporting engine.<br>
+<br>
+Note: Find all of the code and data described in this article in
+tutorials/HAR_Tutorial<br>
+<h2>Benefits</h2>
+ APC repurposes HAR files as functional tests
+(regression tests, smoke tests, integration tests,) load and
+performance tests, and production monitors. The HAR ScriptRunner in
+APC loads the resources defined in a HAR file just as a browser
+does. The HAR support in APC delivers these benefits:<br>
+<ul>
+  <li>The fastest way to create and run an HTTP protocol-level tests of
+Web applications. No&nbsp;test coding, scripting, or programming.</li>
+  <li>Highly scalable play-back to thousdands-of-virtual-users per
+TestNode</li>
+  <li>Data-driven HAR tests using CSV and RDBMS query data</li>
+  <li>Operates just like a browser to test your network connectivity
+and Web server</li>
+  <li>APC repurposes HAR files to be functional tests (regression
+test, smoke test, integration test,) load and performance tests, and
+production monitors</li>
+</ul>
+<h2>Limitations</h2>
+The HAR ScriptRunner is not appropriate for tests of Rich Internet
+Applications (RIA, using Ajax, Flex, Flash.) The HAR ScriptRunner
+operates at an HTTP protocol level. It does not does not operate the
+dynamically running Javascript functions in a typical RIA. Instead use
+APC's&nbsp;browser-based test technology (Sahi</a> and Selenium</a>
+tests running in HtmlUnit, Firefox, IE, Chrome, Safari) for
+RIA testing.<br>
+<h2>Prerequisites</h2>
+Install the following tools:<br>
+<br>
+<a href="http://www.mozilla.com/en-US/firefox/">Firefox</a> 3.6 or
+greater<br>
+<a href="http://getfirebug.com">Firebug</a> 1.6 or greater<br>
+<a href="http://getfirebug.com/releases/extensions.html#netexport">NetExport</a>
+0.7 or greater<br>
+<br>
+You may also accomplish the tests in this tutorial using IE 9 and APC. See this <a href="http://blogs.msdn.com/b/ie/archive/2010/04/22/ie9-developer-tools-network-tab.aspx">article</a> for details.<br>
+<h2>How It Works</h2>
+When a browser opens a Web page it initiates a complicated set of
+network protocols to load the HTML of the page and any supporting
+resources, including style sheets (CSS,) images, sound files,
+Flex/Flash components, and&nbsp;media
+files. The Firebug Net panel shows the time it takes and the order to
+load the resources.<br>
+<br>
+<img style="border: 1px solid ; width: 1000px; " alt="Firefox browser with Ajax tutorial application home page and Firebug utility open" src="images/brewbiz_firebug.png"><br>0
+<br>
+<br>
+The browser has a connection pool mechanism to load groups of resources
+concurrently. Most browsers have 10 resource loader by default. The
+browser opens 10 network socket connections to the Web server. Each
+connection loads a resource concurrently to the other socket
+connections. Once a resource loads, the browser uses the resource
+loader to get the next resource.<br>
+<br>
+Firebug shows us a timeline to load these
+resources in the Net tab. The following chart shows the browser loading
+the HTML of the page. The browser parses the page into a
+Document Object Model (DOM.) Then it loads the resources, in this case
+the browser gets the BrewBiz_Header.png image. As each resource loads,
+the
+browser loads the next resource.<br>
+<br>
+<br>
+<img style="border: 1px solid ; width: 1000px; " alt="Firebug NET tab showing load times for resources" src="images/timeline.png"><br>
+<br>
+Clicking the Export button creates an HTTP Archive (HAR)&nbsp;formatted
+file. The file
+contains a list&nbsp;resources the browser loads, the duration of time
+to load the resource, and the sequence the resource loads. HAR
+is&nbsp;useful to optimize the page loading time of your Web
+application.<br>
+<br>
+APC uses the HAR file in the following ways:<br>
+<ul>
+  <li>APC duplicates the browser behavior by loading the
+resources
+defined in a HAR file. APC supports cookies and browser caching.</li>
+  <li>APC's HAR ScriptRunner provides&nbsp;browser
+connection pooling to load groups of resources concurrently. APC
+defaults to 10 concurrent connections.</li>
+  <li>APC
+tracks the time to load each resource as a step in a transaction and
+the success or failure to load the resource. APC reports the
+performance of the Web application in a set of graphic charts.&nbsp;</li>
+  <li>APC replaces values in the HAR file from Data Production
+Library
+(DPL) sources, including comma separated value (CSV) and relational
+database (RDBMS) queries.&nbsp;</li>
+  <li>APC's HAR ScriptRunner operates the test at the HTTP
+protocol level efficiently.&nbsp;Since the ScriptRunner does not
+process the HTML, CSS, or Javascript (as the other Sahi Htmlunit and
+Selenium Htmlunit ScriptRunners do) the HAR ScriptRunner runs up to
+thousands of virtual users per TestNode.</li>
+  <li>APC repurposes HAR files to be functional tests (regression
+test, smoke test, integration test,) load and performance tests, and
+production monitors.</li>
+  <li>APC uses HAR files without any test coding, scripting, or
+programming.</li>
+</ul>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Tasks</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Our
+challenge in
+this tutorial is to build a test of a Web application. The
+tutorial will show how to use the test for regression and smoke
+testing.
+Then the tutorial will repurpose the test as a load and performance
+test and business service monitor.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li><a href="#task1create">Create A Functional Test</a></li>
+  <li><a href="#task2datadriven">Make This A Data-Driven Test</a></li>
+  <li><a href="#task3load">Make This A Load and Performance Test</a></li>
+  <li><a href="#task3load">Monitor The Web Application for SLA
+Compliance</a></li>
+</ol>
+<h2>1. <a name="task1create"></a>Create a Functional Test</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+this task we will create a functional test of the BrewBizWeb tutorial
+Web application example. We chose this tutorial application because
+BrewBizWeb has no JavaScript requirements. Everything is HTML, forms,
+images, and text.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Open Firefox. Open the Firebug add-on from the Tools drop-down
+menu. Navigate to http://<Cloud_machine_name>:8080/BrewBizWeb/login.html<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="BrewBizWeb tutorial service log-in form" src="images/brewbiz_index.png"><br>
+    <br>
+    <br>
+    <br>
+  </li>
+  <li>In the Firebug panel click the Net tab. You may need to reload
+the page to active the Net tab contents.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Net tab showing loaded html and png resources" src="images/brewbiz_firebug.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Click Export, Save As... Name the file login.har.&nbsp;Click the
+Save button.<br>
+    <br>
+  </li>
+  <li>Start APC. Create a new functional test in APC. Use
+Scenario Builder from the Start Screen. This opens the
+APC Scenario Builder automatically.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editor setting the use case" src="images/HAR_Editor.png"><br>
+    <br>
+  </li>
+  <li>Click the Use Cases button in the Scenario Builder. Choose the HAR entry in
+the Test Type pop-up menu.<br>
+    <br>
+  </li>
+  <li>Click the Browse button in the Resource field. Choose the
+login.har file you created in Step 3.<br>
+  </li>
+  <li>Enter myinstance in the Instance field.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editor setting the use case" src="images/Editor_usecase_har.png"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </li>
+  <li>Click the Play icon and view the results. APC shows the transaction time to process the entire HAR
+file and step times for each resource loaded. A check mark indicates
+successful loading of a resource.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Appvance Enterprise Console main window" src="images/har_functional_results.png"><br>
+    <br>
+  </li>
+  <li>To add additional Web pages to the test, repeat steps 1-3. Save a
+new HAR file for each additional page. In the Scneario Builder's Use Case tab,
+click Add Test and add additional steps for each HAR file. Set the
+Instance value to myInstance to enable caching of Web page resources
+among the operation of all the test steps.<br>
+    <br>
+    <br>
+  </li>
+  <li>Click the Run button to see the results.<br>
+    <br>
+  </li>
+</ol>
+<h3>Options</h3>
+The HAR ScripRunner features two optional values. Set these in the
+Options tab of the Scenario Builder:<br>
+<ol>
+  <li>Connection pool size - Controls the number of concurrent
+resources to load. Most browsers use a value of 10.<br>
+  </li>
+  <li>Failure tollerance level - Identifies the number of resource
+loads that fail before APC identifies the entire HAR test step a
+failure.<br>
+    <br>
+  </li>
+</ol>
+<h2>2. <a name="task2datadriven"></a>Make This A Data-Driven Test</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Task 2 enhances
+the
+functional test to use
+a Data
+Production Library (DPL.) The DPL&nbsp;reads data from a comma
+separated value (CSV) flat file. The values provide input to the test
+and validation values, including sign-in and password values in the
+log-in page.</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>Create a
+Comma-Separated-Value file. Use your favorite text
+editor or spreadsheet program. Name the file data.csv. The contents
+must be in the following form.<br>
+    <br>
+    <img style="border: 1px solid ; width: 212px; height: 114px;" alt="Contents of the csv file" src="images/csv.png"><br>
+    <br>
+    <span style="font-style: italic;">A
+quick explanation</span>:
+The first row of the data file contains data mapping names. When
+APC finds a mapping name in the HAR file it replaces with the
+corresponding value from the csv file. The DPL replaces any value,
+including URLs, form values, and text.<br>
+    <br>
+  </li>
+  <li>Connect the Data Production
+Library (DPL) to the HAR
+test in the Scenario Builder. Open HAR_Functional_Test.scenario in
+the
+Scenario Builder. Click the Use Cases tab.<br>
+    <br>
+  </li>
+  <li>Click the Add DPL link in the Login Step.<br>
+    <br>
+  </li>
+  <li>Set
+the DPL type to HashDPL. HashDPL reads data from a comma separated
+value (CSV) file and provides it at test run time to the ScriptRunner.<br>
+    <br>
+  </li>
+  <li>Set the Action pop-up menu to Get Next Row of Data.<br>
+    <br>
+  </li>
+  <li>Click Browse and select the data.csv file.<br>
+    <br>
+    <br>
+  </li>
+  <li>By default APC runs
+the use case in a Functional Test once and uses the first row of data
+in the CSV file only. Click the General tab and select the "Repeat for
+all data" checkbox to repeat the Functional Test for all rows of data
+in the data.csv file.<br>
+    <br>
+    <img style="border: 1px solid ; width: 233px; height: 44px;" alt="Controller window showing test repeated 3 times, once per row in the data.csv file" src="images/repeat_for_all_data.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Click the Play button and view the results. APC operates the Use Case for each row of data in the data.csv
+file.<br>
+    <br>
+    <br>
+  </li>
+</ol>
+<h2>3. <a name="task3load"></a>Make This A Load and Performance Test</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>A common
+goal of testing is to learn how your Web application performs under the
+load of many virtual users. Load and performance testing are useful in
+the following ways:<br>
+<ol>
+  <li>Shows what you can expect the end-user experience to be at
+various levels of concurrently running users.</li>
+  <li>Shows&nbsp;how your Web application falls-apart under too much
+load.</li>
+  <li>Surfaces performance bottlenecks and functional issues that only
+happen under the load of many users.</li>
+</ol>
+APC puts this knowledge into your hands by delivering a
+Scalability Index of your Web application. A Scalability Index shows
+the throughput of your Web application measured at the client side at
+increasing levels of concurrently running virtual users. The
+Scalability Index demonstrates how close to linear scalability is your
+Web application. The goal of any
+application is linear scalability: performance should remain constant
+as more users appear.<br>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the APC window use
+the Play Button from the Start Screen; Browse command. Use the file selector to
+choose HAR_Tutorial/HAR_Load_Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  <li>Set the test to be a load
+test in the General tab.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editor showing General tab with test repurposed to a load test" src="images/har_loadtest.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Add 3 virtual user levels to the test. Set the virtual users
+levels to 1, 2, 3.<br>
+    <br>
+Appvance operates the
+test use case for 1 minute in 1 concurrently running
+simulated
+users, then 2 users, then 3 users. The Real Time Scalability Index
+contrasts the throughput of the application - how many times it can run
+the test use case in the given test time - measured as Transactions Per
+Second (TPS) for each of the three user
+levels. A perfectly scalable system will increase TPS in linear
+proportion to the increase in users. For example, at 2 users doing 0.03
+TPS a 4 user level should be twice the TPS, or 0.06 or higher.
+APC's console shows the actual application throughput on top of
+what
+ideal application throughput with linear
+scalability.<br>
+    <br>
+See the Results Analysis chapter of the APC User Guide for
+explanation of the thousands of additional charts to identify the root
+cause of a performance bottleneck.<br>
+    <br>
+  </li>
+  <li>Click the Play button and view the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Console showing three TPS columns for each level of load tested" src="images/controller_load_har.png"></li><br>
+
+</ol>
+
+<h2>4. <a name="task4monitor"></a>Monitor The Web Application for SLA
+Compliance</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Business
+Service Monitor (BSM) testing enforces and proves a Service Level
+Agreement (SLA) by operating a test periodically. For example, a
+monitor runs a test every 30 minutes. APC reuses functional
+tests as a monitor with no changes to the HAR test use case.</span><br>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the APC window use
+the Play Button from the Start Screen -&gt; Browse command. Use the file selector to
+choose HAR_Tutorial/HAR_Monitor_Test.scenario<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Monitor window" src="images/har_monitor.png"><br>
+    <br>
+  </li>
+  <li>With the General tab selected, choose Production Monitor and
+enter 30 into the Monitor every field.<br>
+  </li>
+  <li>Click the Play button and view the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px ;" alt="Monitor window" src="images/har_controller_monitor.png"><br>
+    <br>
+Monitor tests run periodically as a single virtual user. APC
+displays the results to the Controller window. APC logs the
+results to the log repository for historical proof that the Web
+application performed as expected.<br>
+<br>
+  </li>
+  <li>Click the Notifications tab. Use the Notifications tab to have APC send an announcement email
+for when the test starts, stops, and hourly with results.<br>
+  </li>
+</ol>
+</div>
+</div>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 97px; height: 40px;" alt="Appvance logo" src="images/ptt_logo_tm_yellow.jpg" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

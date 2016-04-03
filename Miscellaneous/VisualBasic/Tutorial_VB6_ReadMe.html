@@ -1,0 +1,520 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+  <div style="text-align: center;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="text-decoration: underline;"><img style="width: 265px; height: 106px;" alt="Appvance" src="images/ptt_logo_tm.jpg"></span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+  <title>Appvance PerformanceCloud Examples - Testing with Visual Basic 6</title>
+
+
+
+<h1 align="center"><font face="Helvetica, Arial, sans-serif">Testing
+with
+Visual Basic 6 </font>
+</h1>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">Appvance PerformanceCloud(APC)
+provides a Visual Basic ScriptRunner to accomplish the following:</font></p>
+
+<ul>
+
+  <li><font face="Helvetica, Arial, sans-serif">Write unit tests
+in Visual Basic 6 of your application. Repurpose the unit tests to be
+functional tests, load and performance tests, and production monitors
+of your application.<br>
+    <br>
+    </font></li>
+  <li><font face="Helvetica, Arial, sans-serif">Visual Basic
+6 applications are often GUI applications that are supposed to be
+run interactively by users. APC uses its ability to run command
+line applications to support VB applications developed as scripts
+that run GUI less.</font></li>
+</ul>
+
+<p align="left"><br>
+<font face="Helvetica, Arial, sans-serif">The following is a simple
+application Appvance created in Visual Studio. We made
+the&nbsp;GUI-Less by removing the Forms and using a simple module
+with an <b>Main</b>
+subroutine. This example
+uses the WinInet library to read a page and then a string search to
+assert it contains some text.&nbsp;</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">First, let's
+declare the libraries
+needed:</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Option
+Explicit</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Const
+INTERNET_OPEN_TYPE_PRECONFIG = 0</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Const
+INTERNET_FLAG_EXISTING_CONNECT = &amp;H20000000</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Private
+Declare Function InternetOpen Lib "wininet.dll" Alias
+"InternetOpenA" _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>(ByVal
+lpszAgent As String, ByVal dwAccessType As Long, _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>ByVal
+lpszProxyName As String, ByVal lpszProxyBypass As String, _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>ByVal
+dwFlags As Long) As Long</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Private
+Declare Function InternetOpenUrl Lib "wininet.dll" Alias _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>"InternetOpenUrlA"
+(ByVal hInternetSession As Long, ByVal lpszUrl As String, _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>ByVal
+lpszHeaders As String, ByVal dwHeadersLength As Long, _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>ByVal
+dwFlags As Long, ByVal dwContext As Long) As Long</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Private
+Declare Function InternetCloseHandle Lib "wininet.dll"
+(ByVal hInet As _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Long)
+As Integer</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Private
+Declare Function InternetReadFile Lib "wininet.dll" (ByVal
+hFile As _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Long,
+ByVal lpsBuffer As String, ByVal dwNumberOfBytesToRead As Long, _</b></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>lNumberOfBytesRead
+As Long) As Integer</b></font></font></p>
+
+<p align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1"><b>Private
+Declare Function ExitProcess Lib "kernel32" (ByVal
+uExitCode As Long)</b></font></font><br>
+<br>
+</p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">The last
+line adds the exit process call to send an exit code. We use this to
+tell APC that the script finished correctly or in error.</font></p>
+
+<p align="left"><font face="Helvetica, Arial, sans-serif">Next
+the application parses the input arguments:</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Sub
+Main()</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+aArgs() As String</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+hInternetSession As Long</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+hUrl As Long</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+lBytesRead As Long</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+ok As Boolean</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+sBuffer As String</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+sResp As String</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+sAssertText As String</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+sURL As String</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Dim
+i, j As Integer</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">On
+Error GoTo ErrorHandler</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">aArgs
+= Split(Command$, " ")</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sAssertText
+= ""</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sURL
+= ""</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">For
+i = LBound(aArgs) To UBound(aArgs)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Select
+Case LCase(aArgs(i))</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Case
+"-url"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+url specified</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+i = UBound(aArgs) Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1000, , "Unexpected end of parameters"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">i
+= i + 1</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+Left(aArgs(i), 1) = "-" Or Left(aArgs(i), 1) = "/"
+Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1001, , "URL is missing"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sURL
+= aArgs(i)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Case
+"-asserttext"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+AssertText specified</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+i = UBound(aArgs) Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1002, , "Unexpected end of parameters"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">i
+= i + 1</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+Left(aArgs(i), 1) = "-" Or Left(aArgs(i), 1) = "/"
+Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1003, , "Assert Text is missing"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+Left(aArgs(i), 1) = """" Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sAssertText
+= Right(aArgs(i), Len(aArgs(i)) - 1)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">i
+= i + 1</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">j
+= i</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">While
+(j &lt; UBound(aArgs))</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+Right(aArgs(i), 1) = """" Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sAssertText
+= sAssertText + " " + Left(aArgs(i), Len(aArgs(i)) - 1)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">i
+= j</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">j
+= UBound(aArgs) ' done this way because compiler did not accept exit
+while</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sAssertText
+= sAssertText + " " + aArgs(j)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">j
+= j + 1</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">i
+= i + 1</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Wend</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sAssertText
+= aArgs(i)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Case
+Else</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1004, , "Invalid Parameter " + LCase(aArgs(i))</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+Select</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Next
+i</font></font><br>
+</font><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">This example&nbsp;accepts two
+parameters:&nbsp;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">-url to pass the URL of the page
+to
+load</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif"> -asserttext to indicate the text
+that should be in the page
+content for the validation</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">Next the example code loads the
+page and saves it to a string:</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif"><font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+sAssertText = "" Then</font></font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1005, , "No Assert Text Indicated"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+sURL = "" Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1006, , "No URL Indicated"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+Len(sURL) = 0 Then Err.Raise 5</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+open an Internet session, and retrieve its handle</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">hInternetSession
+= InternetOpen(App.EXEName, INTERNET_OPEN_TYPE_PRECONFIG, _</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">vbNullString,
+vbNullString, 0)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+hInternetSession = 0 Then Err.Raise 1007, , _</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">"An
+error occurred calling InternetOpen function"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+open the file and retrieve its handle</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">hUrl
+= InternetOpenUrl(hInternetSession, sURL, vbNullString, 0, _</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">INTERNET_FLAG_EXISTING_CONNECT,
+0)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+hUrl = 0 Then Err.Raise 1008, , _</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">"An
+error occurred calling InternetOpenUrl function"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sBuffer
+= Space(4096)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sResp
+= ""</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Do</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+reads Response</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">ok
+= InternetReadFile(hUrl, sBuffer, Len(sBuffer), lBytesRead)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+lBytesRead = 0 Or Not ok Then Exit Do</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">sResp
+= sResp + Left$(sBuffer, lBytesRead)</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Loop</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> </p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">'
+Checks text to assert</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">If
+InStr(1, sResp, sAssertText, vbTextCompare) = 0 Then</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">Err.Raise
+1009, , "Assert Failed! " + sAssertText + " was not
+found"</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Courier New, monospace"><font style="font-size: 8pt;" size="1">End
+If</font></font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">The
+last steps in the code above checks for the presence of the text to
+assert. </font>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">We build this to&nbsp;a .exe.</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">We use the APC Scenario Builder to
+reference the .exe file in a APC
+Scenario.</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><img style="border: 1px solid black; width: 1000px;" alt="Editor with VB test use case step" src="images/Editor_VBExample.png"></p>
+
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">Internal to the TestScenario XML
+we identify the .exe in the
+resources:</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;resources&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&nbsp; &nbsp;&lt;module
+name="VB6" path="CheckURL.exe"/&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;/resources&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">CheckURL
+is the name of the executable we created.</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">Now,
+we will cal the application indicating in the langtype it is a
+visualbasic app. Also, note the parameters we pass.</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><br>
+</p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;run
+name="Untitled1" command="CheckURL.exe"
+langtype="Visualbasic"&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;argument
+name="arg" value="-url"/&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;argument
+name="arg" value="http://www.google.com"/&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif"> &lt;argument
+name="arg" value="-asserttext" /&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"> <font face="Helvetica, Arial, sans-serif">&lt;argument
+name="arg" value="Google"/&gt;</font></p>
+
+<p style="margin-bottom: 0in;" align="left"><font face="Helvetica, Arial, sans-serif">
+&lt;/run&gt;</font></p>
+
+<p><br>
+</p>
+
+<table bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" cellspacing="2" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" name="graphics30" align="bottom" border="0" height="2" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.pushtotest.com/"><font color="#000000"><img style="width: 152px; height: 33px;" alt="PushToTest logo" src="images/ptt_logo_tm.jpg" name="graphics31"></font></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" name="graphics32" align="bottom" border="0" height="2" width="30"></p>
+            </td>
+            <td>
+            <p><font size="2">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br>
+<br>
+</p>
+
+</body></html>

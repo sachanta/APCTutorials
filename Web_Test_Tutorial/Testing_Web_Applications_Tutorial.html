@@ -1,0 +1,894 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance Examples - Tutorial on Ajax RIA Testing with Appvance PerformanceCloud(APC) Object Designer</title></head><body>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 270px; height: 112px;" alt="Appvance" src="images/ptt_logo_tm.jpg"><br>
+</div>
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build A Test of a<br>
+Rich
+Internet Application (RIA)<br>
+In 30 Minutes Or Less. </h1>
+<h2>The APC Web Application Tutorial</h2>
+<br>
+<div style="text-align: left;">This
+article shows how to build a test of a Rich
+Internet Application (RIA, with Ajax)
+using Appvance Designer&nbsp;
+in minutes. This
+article then shows the
+tremendous power in APC to repurpose the test as a load and
+performance test and a business service monitor with no extra coding.<br>
+<br>
+Note: Find all of the code and data described in this article in
+tutorials/Web_Test_Tutorial<br>
+<br>
+Enterprises are challenged to surface&nbsp;performance and load
+issues,
+regression and functional issues, and to accomplish business service
+production monitoring in Rich Internet Application (RIA) environments
+that use
+Ajax technology. Successful&nbsp; applications on the public
+Internet, such as Google Docs, Flikr,
+Facebook, and Google Maps, drive users and managers to expect rich user
+interfaces and advanced
+functions in an organization's Web applications. For instance, the
+following Ajax application has the look-and-feel of a desktop
+application, and it is running entirely in a Web browser.<br>
+<br>
+<br>
+<div style="text-align: left;"><img style="border: 1px solid ; width: 1000px; " alt="Calendar Ajax example application" src="images/desktop_start.png"><br>
+</div>
+<br>
+<br>
+This tutorial builds a test of this Ajax
+application in APC. The tutorial will show how to use the test
+for regression
+and smoke testing. Then the tutorial will repurpose the test as a load
+and performance test and business service monitor.<br>
+<br>
+APC Designer is an easy-to-use record/playback
+technology to visually build tests.&nbsp;Designer records test
+scripts in Internet Explorer (IE), Firefox, Chrome, and Safari
+browsers. Playback tests in these browsers and the <a href="http://htmlunit.sourceforge.net/">Htmlunit</a>
+headless browser. APC repurposes the same test as a functional
+test, load and performance test, and business service monitor. Designer
+runs on Windows, Linux, and Mac systems.
+<br>
+<br>
+Designer creates and edits Designer Script test objects. Sahi is an
+commercial Web test suite development tool that works well with Ajax
+applications. Selenium is an commercial Web browser automation
+platform. Selenium works well with Web 1.0 applications. Flex testing
+supports functional testing of Flex and Flash components.<br>
+<br>
+<br>
+</div>
+</div>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Tasks
+and Scenario</h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Our
+challenge in
+this tutorial is to build a test of the Ajax application. The
+tutorial will show how to use the test for regression and smoke
+testing.
+Then the tutorial will repurpose the test as a load and performance
+test and business service monitor.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li><a href="#task1">Build and run a functional
+test of the Ajax
+application</a></li>
+  <li><a href="#task2">Run the test in a TestNode
+using the Firefox browser</a></li>
+  <li><a href="ReadMe.html#taskrc">Run the test in a
+TestNode using the HtmlUnit browser</a></li>
+  <li><a href="#task3">Reuse the test as a
+data-driven test with a Data Production
+Library that reads data from a Comma-Separated-Value (CSV) file</a></li>
+  <li><a href="#task4">Reuse the test as a load and
+performance test</a></li>
+  <li><a href="#task5">Reuse the test as a business
+service monitor</a></li>
+  <li><a href="#task6">Transform the test into a
+Jython script and Java test class</a></li>
+  <li><a href="#debug">Debugging Ajax Applications: Tips and
+Techniques</a><br>
+    <br>
+  </li>
+</ol>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Test
+Use Case</h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">
+A software quality tester needs to test
+an Ajax system. The tester follows these steps:</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>Open the Ajax test
+application and view the Desktop</li>
+  <li>Add A Company to the
+directory</li>
+  <li>Change an Employee's
+information</li>
+  <li>Exit from the application
+and test</li>
+</ol>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Implementation</h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Find all of the
+code and data described in this article in
+tutorials/Web_Test_Tutorial</span><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Preparation
+To Use This Tutorial</h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">
+This tutorial can be downloaded with a URL provided from Appvance. User can download the tutorials from the URL from Amazon s3 where the 
+tutorials will be uploaded. When APC runs it
+makes the tutorial service available at <a href="http://Cloud_machine_name:8080/AjaxApp/examples/desktop/desktop.html">http://cloud_machine_name:8080/AjaxApp/examples/desktop/desktop.html</a></span><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+<br>
+This tutorial uses the following file name conventions:<br>
+</span>
+<ul>
+
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">APC
+Designer creates Designer Script files ending in .ds</span></li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">Sahi
+test script files end in .sah</span></li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">Selenium
+IDE creates script files ending in .selenese<br>
+    </span></li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">APC Scenario Builder creates Test
+Scenario files ending in .scenario</span></li>
+</ul>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">This tutorial
+assumes you have Firefox 3.6 or later installed.<br>
+<br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task1"></a>Task
+1: Record and Playback A Web
+Application Functional Test</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">In
+this task we will create a&nbsp;test of the Ajax application using
+the APC Designer record/playback utility.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>Start APC<br>
+    <br>
+    <img style="width: 1000px; " alt="" src="images/APC-start.png"><br>
+   
+    <br>
+  </li>
+  <li>Click Designer link on the Expert Suite.<br>
+
+    <br>
+  </li>
+  <li>APC Object Designer
+appears. Click the Record button.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Appvance Enterprise Object Designer main window" src="images/designer_start.png"><br>
+    <br>
+&nbsp;</li>
+  <li>Choose Firefox from the Browser list and click
+Record Test.<br>
+    <br>
+  </li>
+  <li>Enter the starting URL to
+the Ajax tutorial application of <a href="http://cloud_machine_name:8080/AjaxApp/examples/desktop/desktop.html">http://cloud_machine_name:8080/AjaxApp/examples/desktop/desktop.html</a>.
+Then click
+Ok.<br>
+    <br>
+    <img style="border: 1px solid ; width: 402px; height: 123px;" alt="Enter starting URL" src="images/startingurl.jpg"><br>
+    
+    <br>
+  </li>
+  <li>The Designer opens Firefox and
+shows the Ajax application window.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Ajax application window opens" src="images/firststep.png"><br>
+   
+    <br>
+Designer is now recording your use of the Ajax application.</li>
+  <br>
+  <li>Double-click the Company
+List icon in the Ajax application. Click
+Add Company. Name the company Appvance, set the price to 101, and set
+the Change value to 0.50. Click the Save button.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Add a company to the company list" src="images/AjaxCompanyData.png"><br>
+   
+    <br>
+  </li>
+  <li>Scroll down to the bottom of
+the Company list. Verify the
+Appvance entry in the Company list.<br>
+    
+    <br>
+  </li>
+  
+  <li>Add a Checkpoint to the test
+to verify the Appvance entry is in the Company list. In the Designer
+window, Checkpoint tab is available in the bottom panel. It looks like this:<br>
+    <br>
+    <img style="width: 1000px; " alt="Designer Checkpoint icon for adding assertions" src="images/checkpoint.png"><br>
+   
+
+Roll the mouse pointer over the Appvance entry in the Company list.
+Hold the Control key down and click on the Appvance row in the
+Company list. This updates the Assertion Type to AssertExists.<br>
+    <br>
+    
+    <img style="border: 1px solid ; width: 1000px; " alt="Add Assertion panel with AssertExists" src="images/AssertionExists.png"><br>
+    
+Click the Add button.<br>
+    <br>
+  </li>
+
+  <li>Click End Recording in the
+Designer window.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Add Assertion panel with AssertExists" src="images/Script.png"><br>
+    <br>
+    <span style="font-style: italic;">A Quick Tip</span>: Double-click
+in the Action, Accessor, and Value fields in any row of the test to see
+a helpful pop-menu of options. For example, the Action pop-up shows you
+a sorted list of available action commands.<br>
+    <br>
+  
+  </li>
+  <li>Save the test script to a
+file. Choose Save
+command. Name the file AddCompany.ds. Designer will add a .ds
+file extension automatically.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Export test script to file" src="images/FileSave.png"><br>
+    <br>
+  </li>
+  <li>Next we will see the test
+operate in play-back mode. Click the Play Test icon.<br>
+    <br>
+    <img style="border: 1px solid ;  " alt="Play, pause, stop, step icons" src="images/PlayTest.png"><br>
+    <br>
+  </li>
+  <li>Choose a browser to play the
+test. <br>
+    <br>
+    <img style="border: 1px solid ; " alt="Add Assertion panel with AssertExists" src="images/ChooseBrowser.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Playing a test is useful for
+debugging the test script.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="After playing a test" src="images/designer_log_tab.png"><br>
+    <span style="font-style: italic;"><br>
+    </span></li>
+</ol>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Ajax
+applications are asynchronous by their nature. For example, the example
+Ajax application displays the Add Company dialog box by running a
+Javascript function within the browser. At times you may need to
+manually add steps to the test script to wait for a Javascript function
+to finish processing before the test proceeds. We added Line 4 of the
+finished AddCompany script manually: assertVisible textbox("company)<br>
+<br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;">Designer
+saves to Designer Script formatted files. Designer
+Script files support the Sahi</a>,
+Selenium</a>,
+and Flex</a> domain specific
+languages (DSLs.) Each script type
+has its advantages and disadvantages. For example, Sahi element
+accessors are more powerful and less complex to keep. Change the type
+by operating the Script Type drop-down menu.&nbsp;<br>
+<span style="font-style: italic;"></span><br>
+Designer exports test scripts in Sahi (Javascript,) Selenium (Selenese
+table format and high level language - Java, Ruby, PHP, Jython - unit
+tests) using the File, Export menu command.<br>
+<br>
+In the above steps you operated the test of an Ajax application using a
+Web browser. Designer operates the recorded test script step-by-step.
+This works well when
+building and debugging tests.<br>
+<br>
+In the next part of this tutorial you will operate the recorded test in
+the APC test automation platform. APC automates
+operation of the test, data-enables the Designer Script test,
+produces reports for the operation of the test, enables the test to be
+a step within a larger use case, and repurposes the test to be a load
+and performance test and business service monitor
+from the same single test.</span><br>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task2"></a>Task
+2: Run The Test In A TestNode</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">
+APC makes it easy to repurpose a test as a functional test,
+load and performance test, and production monitor. APC operates
+tests in a&nbsp;distributed
+test
+environment. Appvance provides an easy-to-use
+central console that sends
+the test to one or more TestNodes. Each TestNode is equipped
+with&nbsp;script runners to operate the test in the test's native
+format. This distributed test environment scales
+up to meet your testing needs from hundreds to millions of virtual
+users. TestNodes optionally data-enable tests by injecting operational
+test data
+into
+tests from csv data files, relational database queries, and data
+generating objects. The TestNodes record the time it takes to operate a
+use case and each of the steps in the Sahi test for results
+analysis reporting.<br>
+</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 417px; height: 306px;" alt="Appvance distributed test environment" src="images/FocusOnNodes.png"><br>
+</div>
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<span style="font-family: Helvetica,Arial,sans-serif;">The
+APC sends the&nbsp;test to one or more TestNodes. Each TestNode
+operates
+the test using a script runner. This tutorial uses the Designer Script runner. The Designer Script runner operates the test in
+IE, Firefox, Chrome, Safari browsers. The Script Runner
+optionally
+uses the built-in HTMLUnit browser for high speed and large scale test
+operation. The TestNode logs the time it
+takes for the application
+to
+respond and returns the transaction logs to the Appvance console.<br>
+<br>
+</span>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 400px; height: 431px;" alt="Operating a test using browsers and the internal HTMLUnit browser" src="images/NodeAndBrowsers.png"><br>
+</div>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">The
+APC identifies the operating parameters of a
+functional test, load and performance test, and business service
+monitor in a TestScenario. </span>Create a TestScenario in the
+APC Scenario Builder. From the APC choose Scenario Builder from the Expert Suite. The Scenario Builder appears with a new
+untitled TestScenario.<br>
+    <br>
+Optionally, open a pre-created TestScenario using the Play button from the Start Screen -&gt; Browse Command. The TestScenario is at
+Web_Test_Tutorial/Ajax_Functional_Test.scenario<br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><br>
+    </span></li>
+  <li>Scenario Builder displays the
+TestScenario. Use the tabs to view the TestScenario settings. For
+example, the TestScenario defines use of the Designer Script test in
+the Use Cases tab.<br>
+    <br>
+  </li>
+  <li>The Test Type panel tells APC that this is a functional test
+and to
+run the&nbsp;use case once.<br>
+<br>
+  </li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">Change the
+Test Scenario Name to Ajax Functional Test in the General panel.<br>
+    <br>
+    </span><img style="border: 1px solid ; width: 1000px;" alt="Editor with a new functional TestScenario" src="images/functionaltest_editor.png"><br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><br>
+    <br>
+    </span></li>
+  <li>Click the Use Cases panel. We will set the Use Cases panel to tell
+APC to run a use case that runs the
+test in AddCompany.ds.<br>
+    <br>
+  </li>
+  <li>Choose&nbsp;Designer Script for the Test Type.<br>
+    <br>
+  </li>
+  <li>Click Browse and use the file selector to choose AddCompany.ds<br>
+    <br>
+    <img style="border: 1px solid ; width: 600px; height: 444px;" alt="Editor use case tab" src="images/editor_usecase_functional.jpg"><br>
+    <br>
+  </li>
+  <li>Set the Browser field to firefox. If Firefox is
+not installed on your machine then use an alternative: iexplore for
+Microsoft Internet Explorer, chrome for Google Chrome, safari for Apple
+Safari.<br>
+    <br>
+  </li>
+  <li>The TestNodes panel tells APC to send the
+recorded test to the
+TestNodes
+that will operate the test. APC supports automatic operation of
+tests on TestNodes in a grid environment</a> in
+your QA lab and in a cloud
+testing environment</a>. Leave the default value to run the test on the
+local TestNode.<code></code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+    <br>
+    </span> </li>
+  <li>From the APC use Play button choose Browse -&gt; Open
+and select the
+file&nbsp;&nbsp;Web_Test_Tutorial/Ajax_Functional_Test.scenario.<span style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+    <br>
+  </li>
+  <li>APC opens a new
+controller panel for the
+TestScenario. The
+controller panel includes icons to Play, Stop, Edit and Cancel the test.<br>
+    <br>
+  </li>
+  <li>Click the Play button and
+watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Results of running the functional test" src="images/ajax_functional_controller.png"><br>
+    <br>
+As the test operates you will see the Firefox browser open and Sahi
+operates the application. At the end of the test APC closes the
+Firefox browser session for the test.<br>
+    <br>
+Functional tests run a test as a single user. APC displays
+check-marks next to each step of the Sahi test that operate
+successfully. APC shows the amount of time to operate the use
+case and each step in the Sahi test.<br>
+    <br>
+APC displays an X mark for a step that fails. Use the Options link -&gt; Output logs (or click the Output button in the Controller
+window) to view the logs to learn the cause of
+the failure. In the Output window click the Local TestNode Error and
+Local TestNode Output
+tabs.<br>
+    <br>
+See&nbsp;<a href="#debug">tips
+and techniques</a> to solve failures.<br>
+ <br>
+  </li>
+</ol>
+
+
+<h2 style="font-weight: bold; font-family: Helvetica,Arial,sans-serif;"><a name="taskrc"></a>Task 3: Run A Test In A
+TestNode Using HtmlUnit<span style="font-family: Helvetica,Arial,sans-serif;"></span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Previously Task
+2 shows how
+to operate a Designer Script test in a TestNode using Firefox.
+APC provides the&nbsp;HtmlUnit library to operate tests in
+the HtmlUnit browser. HtmlUnit is a headless browser. <br>
+<br>
+HtmlUnit is very efficient at using memory and CPU resources compared
+to browsers like Internet Explorer (IE) and Firefox. While we may get
+3 or 4 instances of IE to run on a server, APC runs hundreds of
+HtmlUnit browsers concurrently in the same machine. HtmlUnit's
+efficience is the best choice for repurposing test scripts
+to be load and performance tests and production monitors.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;"><img style="width: 400px; height: 431px;" alt="Operating a test using browsers and the internal HTMLUnit browser" src="images/NodeAndBrowsers.png"></div>
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>In the APC window use
+Play Button from the Start Screen -&gt; Browse
+command. Use the file selector to choose
+Web_Test_Tutorial/Ajax_Functional_Test_HtmlUnit.scenario<br>
+    <br>
+  </li>
+  <li>APC opens a new
+controller panel for the TestScenario. The
+controller panel includes icons to Play, Stop, Edit and Cancel the test.<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+controller panel. We only made 1
+change
+from the TestScenario that operates the Designer Script test with the
+internal
+HTMLUnit browser:<br>
+    <br>
+    <img src="images/ajax_usecase_panel.png" alt="Editing a Selenium RC test" style="border: 1px solid ; width: 1000px; "><br>
+    <br>
+The change tells APC to use the HtmlUnit browser.<br>
+    <br>
+    <br>
+  </li>
+  <li>That's all!, click the Appvance Play
+button and watch the test operate.<br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><br>
+HtmlUnit is a headless browser. You will see no browser window appear
+as we did in Task 1. Click the Transactions tab in the center-right
+panel of the Controller window. Click on of the transactions. View the
+TestNode and error output to see the logs for HtmlUnit.<br>
+    <br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><br>
+APC logs its activies while Sahi runs the test in the HtmlUnit
+headless Web browser.</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"></span>&nbsp;<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+  </li>
+</ol>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task3"></a>Task 4: Make A Data-Driven
+Functional Test</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Task
+3 enhances the
+functional test of the Ajax application from Task 1 and 2 to use
+a Data
+Production Library (DPL.) The DPL&nbsp;reads data from a comma
+separated value (CSV) flat file. The values provide input to the test
+and validation values, including&nbsp;CompanyName, PriceValue, and
+ChangeValue.</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>Create a
+Comma-Separated-Value file. Use your favorite text
+editor or spreadsheet program. Name the file data.csv. The contents
+must be in the following form.<br>
+    <br>
+    <img style="border: 1px solid ; width: 441px; height: 186px;" alt="Comma separate value (CSV) file" src="images/dpl_data.png"><br>
+    <br>
+    <span style="font-style: italic;">A
+quick explanation</span>:
+The first row of the data file contains data mapping names. These will
+be
+used to map values into the Sahi test.<br>
+    <br>
+    <br>
+  </li>
+  <li>Open the Sahi test script in the Designer. Click the Designer
+from the Expert Suite of APC Start Screen.<br>
+    <br>
+  </li>
+  <li>In the Designer, use the Open command
+to open AddCompany-Data-Driven.ds<br>
+    <br>
+    <img style="border: 1px solid ; width: 1004px; " alt="Comma separate value (CSV) file" src="images/designer_log_tab1.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Change the test to
+refer to the data mapping names. For example:<br>
+    <br>
+setValue, textbox("company"), "Appvance"<br>
+    <br>
+to<br>
+    <br>
+setValue, textbox("company"), "$CompanyName"<br>
+    <br>
+An easy way to accomplish this task is to use the Data tab in the
+Designer. Click the Data tab. Click the Browse button. Choose data.csv
+from the tutorial directory.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Data tab selected in Designer showing contents of data.csv file" src="images/Designer_Data_Tab.png"><br>
+    <br>
+    <br>
+Click-and-drag the Appvance value in the Data tab, CompanyName column
+and drop the value in the test script on the Value field. Do the same
+for PriceValue and ChangeValue.<br>
+    <br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Data tab selected in Designer showing contents of data.csv file" src="images/Designer_DPL_Mapped.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Play the test in the Designer to confirm your changes to the Sahi
+test script. The Play button looks like this:<br>
+    <br>
+    <img style="" alt="Icon to run a test in Designer" src="images/designer_run_button.png"><br>
+    <br>
+Click the Play button in the Designer window.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Logs tab showing test run results with data from the csv file" src="images/Designer_Test_Log_With_DPL.png"><br>
+    <br>
+    <span style="font-style: italic;"><br>
+A quick explanation</span>: Designer
+maps the data
+from the
+named column in the CSV data file to the test data using
+the $name notation you just entered.<br>
+    <br>
+  </li>
+  <li>Steps 1-5 ran the test in the Designer on your local
+machine. Next, we will run the test in a TestNode using the CSV
+Data Production Library (DPL)<br>
+    <br>
+  </li>
+  <li>Click Save As... and name the file AddCompany-Data-Driven.ds<br>
+    <br>
+  </li>
+  <li>Connect the Data Production
+Library (DPL) to the Designer Script
+test in the Scenario Builder. Open Ajax_Functional_Test_DataDriven.scenario in
+the
+Scenario Builder. Click the Use Cases tab.<br>
+    <br>
+  </li>
+  <li>Click the Add DPL link.<br>
+    <br>
+  </li>
+  <li>Set
+the DPL type to HashDPL. HashDPL reads data from a comma separated
+value (CSV) file and provides it at test run time to the ScriptRunner.<br>
+    <br>
+  </li>
+  <li>Set the Action pop-up menu to Get Next Row of Data.<br>
+    <br>
+  </li>
+  <li>Click Browse and select the data.csv file.<br>
+    <br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Setting a DPL in the use case" src="images/functional_data_driven.png"><br>
+    <br>
+    <br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"></span></li>
+  <li>By default APC runs
+the use case in a Functional Test once and uses the first row of data
+in the CSV file only. Click the Test Type tab and select the "Repeat for
+all data" checkbox to repeat the Functional Test for all rows of data
+in the data.csv file.<br>
+    <br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><img style="border: 1px solid ; width: 233px; height: 44px;" alt="Appvance Enterprise running a test in the Firefox browser" src="images/repeat_for_all_data.png"></span><br>
+    <br>
+    <br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"></span></li>
+  <li><span style="font-family: Helvetica,Arial,sans-serif;">That's
+all! Click the Appvance Play button and watch the results.<br>
+    <br>
+    </span><span style="font-family: Helvetica,Arial,sans-serif;"><img style="border: 1px solid ; width: 1000px; " alt="Console showing results of multiple data driven test runs" src="images/functional_results.png"><br>
+    <br>
+    <br>
+    </span>APC operates the Use Case for each row of data in the
+data.csv
+file.<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+    </span></li>
+</ol>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task4"></a>Task 5: Repurpose A Functional Test
+As A Load And Performance Tests</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">A common goal of
+testing is to learn how your application performs under the load of
+many virtual users. Load and performance testing are useful in the
+following ways:<br>
+<br>
+&nbsp;&nbsp; 1. Shows what you can expect the end-user experience to be
+at various levels of concurrently running users.<br>
+&nbsp;&nbsp; 2. Shows how your application falls-apart under too much
+load.<br>
+&nbsp;&nbsp; 3. Surfaces performance bottlenecks and functional issues
+that only happen under the load of many users.<br>
+<br>
+APC puts this knowledge into your hands by delivering a
+Scalability Index of your application. A Scalability Index shows the
+throughput of your application measured at the client side at
+increasing levels of concurrently running virtual users. The
+Scalability Index demonstrates how close to linear scalability is your
+Web application. The goal of any application is linear scalability:
+performance should remain constant as more users appear.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>In the APC window use
+the Play Button on the Start Screen -&gt; Browse command. Use the file selector to
+choose WebTest_Sahi_Tutorial/Ajax-Load-Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  <li>Set the test to be a load
+test in the Test Type panelbr>
+    <br> <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Editing a load test" src="images/load_test_editor.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Add 3 virtual user levels to the test. Set the virtual users
+levels to 2, 4, 8.<br>
+    <br>
+Appvance operates the
+test use case for 1 minute in 2 concurrently running
+simulated
+users, then 4 users, then 8 users. The Real Time Scalability Index
+contrasts the throughput of the application - how many times it can run
+the test use case in the given test time - measured as Transactions Per
+Second (TPS) for each of the three user
+levels. A perfectly scalable system will increase TPS in linear
+proportion to the increase in users. For example, at 2 users doing 0.03
+TPS a 4 user level should be twice the TPS, or 0.06 or higher.
+APC's console shows the actual application throughput on top of
+what
+ideal application throughput with linear
+scalability.<br>
+    <br>
+See the Results Analysis chapter of the APC User Guide for
+explanation of the thousands of additional charts to identify the root
+cause of a performance bottleneck.<br>
+    <br>
+  </li>
+  <li>In the Use Cases tab change the browser to sahihtmlunit.<br>
+    <br>
+  </li>
+  <li>Click the Appvance Run button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Running the test as a performance and load test" src="images/loadtest_controller.png"><br>
+    <span style="font-weight: bold;"><br>
+    </span>Appvance operates the
+test in 2 concurrently running
+simulated
+users, then 4 users, then 8 users. The Real Time Scalability Index
+contrasts the Transaction Per Second (TPS) for each of the three user
+levels. A perfectly scalable system will increase TPS in linear
+proportion to the increase in users. For example, at 2 users doing 0.03
+TPS a 4 user level should be twice the TPS, or 0.06 or higher. The
+above chart shows the actual application throughput on top of what
+ideal application throughput with linear
+scalability.<br>
+    <br>
+See the Results Analysis chapter of the APC User Guide for
+explanation of the thousands of additional charts to identify the root
+cause of a performance bottleneck.<br>
+    <br>
+    <br>
+  </li>
+</ol>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task5"></a>Task 6: Repurpose A Functional Test
+As A Business Service Monitor</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Business
+Service Monitor (BSM) testing enforces and proves a Service Level
+Agreement (SLA) by operating a test periodically. For example, a
+monitor runs a test every 30 minutes. APC reuses functional
+tests as a monitor with no changes to the Sahi test and one change .</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>In the APC window use
+the Play button -&gt; Browser command. Use the file selector to
+choose Ajax_Sahi_Tutorial/Ajax-Monitor-Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editing a business service monitor" src="images/ajax_monitor.png"><br>
+    <br>
+    <br>
+This TestScenario runs the test use case as a business service monitor.
+The monitor
+operates the test use case every 10 minutes. The
+monitor keeps running until it encounters an exception.<br>
+    <br>
+  </li>
+  <li>APC optionally sends notification email messages. Click the
+Notifications tab to set the message.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Setting notification email messages" src="images/ajax_monitor2.png"><br>
+    <br>
+    <br>
+  </li>
+  <li>Click the Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Business Service Monitor (BSM)" src="images/ajax_monitor_controller.png"><br>
+    <br>
+The monitor controller panel is a dashboard to the status of the
+service being tested.<br>
+    <br>
+    <br>
+  </li>
+</ol>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task6"></a>Task 7: Transform A Recorded Test
+To A Script-Driven Test</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Appvance
+provides Web application record/playback test capability with Designer.
+There may be times when you need to accomplish a test flow
+that is more than can be modeled with the Designer. For these
+occassions Appvance provides an Export utility to convert a
+recorded test into Javascript, Java, Jython, and several other
+languages. The
+resulting class or script is a fully functional test&nbsp;with
+complete
+access any of Java or Jython's capabilities.<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>In the Designer use the Export command to save
+the test to a Javascript file.<br>
+    <br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Designer exporting a test to a Javascript file" src="images/designer_export.png"><br>
+    <br>
+    <br>
+For more details, read the Script-Driven Testing chapter of the
+APC User Guide.<br>
+    <br>
+    <br>
+  </li>
+</ol>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="debug"></a>8.
+Debugging Ajax Applications: Tips and Techniques</span></h2>
+
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">Ajax
+applications
+provide rich user experiences. In an Ajax application components may
+update themselves asynchronously. Ajax applications communicate to
+information sources external to the browser - like the backend server -
+or even with other components running on the same page. This
+flexibility challenges the tests we write. Our Ajax tests must work
+within the asynchronous nature of the Ajax application. And, we often
+need to make manual changes to the test because of the lack of a
+standard for the Designer to follow when recording an Ajax application.<br>
+<br>
+When you are not certain of the state of your test and the
+application, use the Designer's breakpoints and step functions to view
+the application as the Designer operates the test.<br>
+<br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+
+
+
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 91px; height: 39px;" alt="" src="images/ptt_logo_tm_yellow.jpg" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Appvance PerformanceCloud software is distributed under a
+commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

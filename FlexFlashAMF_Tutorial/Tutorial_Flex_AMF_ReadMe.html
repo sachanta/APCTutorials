@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Appvance Examples - Flex/Flash AMF Protocol Tests</title></head><body>
+<div style="text-align: center;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="text-decoration: underline;"><img style="width: 265px; height: 106px;" alt="Appvance" src="images/ptt_logo_tm.jpg"></span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+</div>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+<h1>Build A Test of an Adobe Flex/Flash Service<br>
+With Native AMF Protocols</h1>
+<br>
+<br>
+<div style="text-align: left;">This
+article shows how to build a test in Appvance PerformanceCloud(APC) using AMF
+Protocols to test Adobe Flex/Flash based applications.<br>
+<br>
+<span style="font-style: italic;">
+Note: Find all of the code and data described in this article
+in&nbsp;/tutorials/FlexFlashAMFTests.</span><br style="font-style: italic;">
+<br>
+AMF is a network protocol that makes it easy for Flex and Flash
+components running in a browser to communicate with PHP, Java, and
+other back-end technologies. APC provides a native AMF protocol
+handler.<br>
+<br>
+AMF is the <a href="http://download.macromedia.com/pub/labs/amf/amf3_spec_121207.pdf">Action
+Message Format</a>. AMF is a proprietary data format created by
+Macromedia (now <a href="http://www.adobe.com">Adobe</a>)
+and used by different mediums: Flash Remoting, ByteArray,
+IExternalizable, NetConnection, NetStream, LocalConnection, Shared
+Objects and more. All of these mediums share the same core data types
+and ActionScript data types. Each medium uses its own exclusive
+envelope. Any AMF-related project should implement reading and writing
+core data types, relevant Actionscript types, as well as providing
+support for its envelope type. <a href="http://osflash.org/tutorials">Click
+here</a> for
+tutorials on open source AMF.<br>
+<br>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Tasks
+and Scenario</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">This tutorial
+uses an example Directory application that ships with APC. The
+tutorial shows how to develop a data-driven functional test of the
+Directory application.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li><a href="#task1">Download the Tutorials Folder</a></li>
+  <li><a href="#task2">Write A Unit Test For The Directory Application</a></li>
+  <li><a href="#task3">Run The Test In A TestNode</a></li>
+  <li><a href="#task4">Repurpose The Test As a Load Test</a></li>
+  <li><a href="#task5">Repurpose The Test As a Business Service Monitor<br>
+    <br>
+    </a></li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Test
+Use Case</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+A software quality tester needs to rapidly build a test of
+an Directory application. The application keeps track of contact
+information for employees. <br>
+<br>
+</span>
+<div style="text-align: center;"><span style="font-family: Helvetica,Arial,sans-serif;"><img style="width: 642px; height: 113px;" alt="Use case for this test" src="images/UseCase.jpg"></span><br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span></div>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+<br>
+<br>
+The test begins by adding a new person to the directory. The test then
+gets a list of people in the directory. The test asserts that the new
+person is in the directory. If the person is not in the directory the
+test throws an exception and APC logs the test as a failure.<br>
+<br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;">This
+tutorial should take you approximately 45 minutes to build and operate
+a test. The following sections show step-by-step instructions.</span><br>
+</div>
+</div>
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Implementation</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">This
+tutorial comes with pre-built tests that are found in the
+tutorials/FlexFlashAMFTests
+directory.&nbsp;See the
+following files for the implementation:</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center; font-family: Helvetica,Arial,sans-serif;">
+</div>
+<table style="width: 550px; height: 244px; text-align: left; margin-left: auto; margin-right: auto; font-family: Helvetica,Arial,sans-serif;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 204, 255);">File
+or Directory</td>
+      <td style="background-color: rgb(153, 204, 255);">Description<img style="width: 500px; height: 1px;" alt="" src="images/blank.gif"></td>
+    </tr>
+    <tr>
+      <td>Tutorial_Flex_AMF_ReadMe.html</td>
+      <td>This document</td>
+    </tr>
+    <tr>
+      <td>DirectoryUnitTest.py</td>
+      <td>Unit test of the directory application</td>
+    </tr>
+    <tr>
+      <td>AMF_Functional_TestScenario</td>
+      <td>Runs the DirectoryUnitTest as a functional test</td>
+    </tr>
+    <tr>
+      <td>AMF_Load_TestScenario</td>
+      <td>Runs the DirectoryUnitTest as a load and performance test</td>
+    </tr>
+    <tr>
+      <td>AMF_Monitor_TestScenario</td>
+      <td>Runs the DirectoryUnitTest as a business service monitor</td>
+    </tr>
+    <tr>
+      <td>data.csv</td>
+      <td>Comma separated value (CSV) file of data for the
+DirectoryUnitTest</td>
+    </tr>
+    <tr>
+      <td>images</td>
+      <td>A directory of illustrations for this document</td>
+    </tr>
+    <tr>
+      <td>openamf.war</td>
+      <td>The Directory Web application. Installed automatically by the
+APC.</td>
+    </tr>
+  </tbody>
+</table>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+<br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task1"></a>Task
+1: Download the Tutorials Folder</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Tutorial Services will be offered to the customers by providing a link to download
+from the Amazon Simple storage service. The
+APC puts the openamf.war file into the local TestNode application
+server (TestNode/webapps).<br>
+
+<br>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task2"></a>Task
+2: Write A Unit Test For The Directory Application</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The following
+Jython script accomplishes a unit test of the Directory application.<br>
+<br>
+<code>'''<br>
+A unit test of the Directory application. Demonstrates use of the Adobe
+Flex/Flash<br>
+AMF protocol handler in APC.<br>
+<br>
+For details see http://www.appvance.com<br>
+<br>
+(c) 2014 Appvance. All rights reserved.<br>
+'''<br>
+<br>
+import sys<br>
+import re<br>
+<br>
+from com.Appvance.tool.protocolhandler.AMF import AMFProtocol<br>
+from com.Appvance.tool import PTTStepListener<br>
+<br>
+class AMFTest:<br>
+&nbsp;&nbsp;&nbsp; def __init__(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.AMF = AMFProtocol();<br>
+<br>
+&nbsp;&nbsp;&nbsp; def setUp(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pass<br>
+<br>
+&nbsp;&nbsp;&nbsp; def runTest(self,person):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ''' <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a new person to the
+directory and check that the person is <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; actually in the directory.
+Receive the person data from a <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; provided hashmap from a
+Appvance Enterprise Data Production Library (DPL.) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '''<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.startStep(
+"setUp" );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+self.AMF.setup("http://localhost:8080/openamf/gateway");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.AMF.setVerbose(1);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.endStep();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.startStep(
+"addPerson" );<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data = [person];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+self.AMF.invoke("org.openamf.examples.Directory.addPerson",data);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.endStep();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.startStep(
+"getPeople" );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name =
+person.get("firstName");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data[0] = name;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result =
+self.AMF.invoke("org.openamf.examples.Directory.getPeople",data);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.endStep();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.startStep(
+"tearDown" );<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resultperson = result[0];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print resultperson;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.AMF.teardown();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PTTStepListener.endStep();<br>
+<br>
+&nbsp;&nbsp;&nbsp; def tearDown(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pass<br>
+<br>
+def getAMFTest():<br>
+&nbsp;&nbsp;&nbsp; ''' Needed by APC to instantiate this test
+object '''<br>
+&nbsp;&nbsp;&nbsp; return AMFTest()<br>
+<br>
+</code>Note: The above unit test is found in DirectoryUnitTest.py<br>
+<br>
+The unit test follows the jUnit TestCase interface definition.
+It implements methods for setUp, runTest, and tearDown.<br>
+<br>
+The runTest method instantiates an AMF protocol handler provided by
+APC's TOOL protocol handler library. The test establishes the
+Directory application service endpoint. The test invokes the addPerson
+service. The test waits for a response and then invokes the getPeople
+service.<br>
+<br>
+This unit test is decorated with two APC provided features: Data
+Production Library provided data and Custom User Step Logging. The
+runTest method receives a Hashmap referred to as person. The
+Hashmap contains name/value pairs retrieved from a comma separate
+value (CSV) file. person contains firstname and lastname key values.<br>
+<br>
+The PTTStepListener startStep and endStep methods define the start and
+end to each Step in the unit test. APC logs the success/failure
+and time it takes to operate each Step. This is later used for root
+cause analysis and mitigation of functional and performance problems.
+For example, APC displays the Step information in a results chart
+when it operates the test.<br>
+<br>
+</span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task3"></a>Task 3: Run The Unit
+Test In A TestNode</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Appvance
+provides an easy-to-use
+central console that sends
+the unit test to one or more TestNodes. The Jython ScriptRunner in
+theTestNode operates the test. The
+test makes
+requests to the application or service to be tested. The test in this
+tutorial makes&nbsp;requests using AMF protocols.
+The&nbsp;TestNode logs the time it takes for the application or
+service
+to
+respond and returns the transaction logs to the Appvance console.</span><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<div style="text-align: center;"><img style="font-family: Helvetica,Arial,sans-serif; width: 444px; height: 323px;" alt="Appvance distributed test environment" src="images/nodefocus.jpg"><br style="font-family: Helvetica,Arial,sans-serif;">
+</div>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+The Appvance console identifies the operating parameters of a
+functional test, load and performance test, and business service
+monitor in a TestScenario document. Four TestScenario
+instructions&nbsp;tell APC everything it
+needs to operate the unit test of the AMF Directory application. Find a
+TestScenario document already created
+for you in FlexFlashAMFTests/AMF_Functional_Test.scenario<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In APC use the Play Button from the Start Screen -&gt; Browse command. Choose&nbsp;<span style="font-family: Helvetica,Arial,sans-serif;">FlexFlashAMFTests/AMF_Functional_Test.scenario</span><br>
+    <br>
+  </li>
+  <li>APC opens a new controller panel for the
+TestScenario. The
+controller panel includes icons to run, pause, stop, and edit the test.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Controller for functional test" src="images/functionaltest_controller.png"><br>
+    <br>
+  </li>
+  
+  <li>Click the Edit button in the controller window to view the
+TestScenario document. This action opens the Scenario Builder.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editing an AMF functional test" src="images/Editor_functionaltest_amf.png"><br>
+    <br>
+    <br>
+The buttons in the Scenario Builder move the view to the part of the TestScenario:<br>
+    <br>
+    <ul>
+      <li>
+The General and Test Type panel identifies test name, type, and details. For example, this test is a
+functional test that runs the use case once.</li>
+      <li>
+Use the UseCases panel to identify one or more unit tests for APC
+to run.</li>
+      <li>
+The TestNodes panel tells APC to send the Jython unit
+test&nbsp;to one or more TestNodes for operation.</li>
+      <li>
+Monitoring identifies the PTTMonitors for APC to observe while
+operating this TestScenario. PTTMonitor observes CPU, Network, and
+Memory usage.</li>
+      <li>
+Options control timing, logging, proxy, and bundle settings. Bundles
+send supporting resources (JAR files, scripts, and libraries) to the
+TestNodes.</li>
+      <li>
+Notifications send email messages hourly, upon test start and stop, and
+when tests encounter errors.</li>
+      <li>
+
+APC stores Jython resources on the TestNode in the ./resources directory for handy access from Jython modules. </li>
+    </ul>    
+    <br>
+    <br>
+  </li>
+
+  <li>In the General tab, change the Repeat value to 5. This is to
+repeat the Use Case for each of the 5 rows of data in the data.csv file.<br>
+    <br>
+    <br>
+  </li>
+  <li>Define the Use Case for this TestScenario using the Use Case panel. Click the Use Case button.<br>
+    <br>
+    <img src="images/Editor_usecases_panel.png" alt="Setting the use case" style="border: 1px solid ; width: 1000px; "><br>
+    <br>
+Set the UseCase Name to AMF Test Case.<br>
+    <br>
+Choose Jython in the Test Type drop-down menu.<br>
+    <br>
+Set the Test Name to AMF Test.<br>
+    <br>
+Click the Resource, Browse button. Choose the DirectoryUnitTest.py file.<br>
+    <br>
+Set the Class to AMFTest.<br>
+    <br>
+Set the Method to runTest.<br>
+    <br>
+Set the Instance to mytest.<br>
+    <br>
+    <br>
+  </li>
+  <li>Data-enable this test by adding a Data Production Library (DPL.)
+The DPL reads rows of data from a comma-separated-value (CSV) file.
+A&nbsp;Data
+Production Library</a>
+(DPL)&nbsp;reads the name of the person to be added to the directory
+from a comma separated value (CSV) file. The DPL in this use case reads
+the next row of data from the CSV
+data file and provides the data to the unit test.<br>
+    <br>
+Click AddDPL under the AMF Test step.<br>
+    <br>
+Click the Resource, Browse button. Choose the data.csv file.<br>
+    <br>
+    <br>
+  </li>
+  <li>Identify required Bundles to operate the unit test. For example,
+the Jython unit test uses the AMFProtocol class in the APC Tool
+library:<br>
+    <br>
+    <span style="font-family: Helvetica,Arial,sans-serif;"><code>from
+com.Appvance.tool.protocolhandler.AMF import AMFProtocol</code></span><br>
+    <br>
+APC includes the AMFProtocol class in the Tool Bundle. The
+AMFProtocol uses the BlazeDS libraries. Bundles are stored in
+TestNode/Bundles.<br>
+    <br>
+Add the BlazeDS and Tool Bundles in the Options menu.<br>
+    <br>
+Click the Resources panel. Click the Add Bundle link.<br>
+    <br>
+Set the name to tool and version to 1.0.<br>
+    <br>
+Click the Add Bundle link a second time.<br>
+    <br>
+Set the second new Bundle to blazeds and the version to 3.0.<br>
+    <br>
+Click the Add Bundle link a third time.<br>
+    <br>
+Set the third new Bundle to jython and the version to 2.2.1.<br>
+    <br>
+    <br>
+    <img style="border: 1px solid ; width: 624px; height: 316px;" alt="The options tab, bundles section" src="images/bundles.png"><br>
+    <br>
+    <br>
+    <br>
+  </li>
+  <li><span style="font-family: monospace;"></span>Click the Run button
+in the controller panel and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="AMF functional test controller window showing tree of results" src="images/Controller_AMF.png"><br>
+    <br>
+
+  </li>
+</ol>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task4"></a>Task 4: Repurpose The
+Functional Test
+As A Load And Performance Test</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The
+test we built in Task 2 operates a functional test by running the unit
+test with a single virtual user.
+Load and performance testing identifies the scalability index of a
+target host application by operating a test with multiple simultaneous
+concurrently running users. Appvance repurposes functional tests as
+load
+and performance tests with changes to 2 instructions in the
+TestScenario. No changes are needed to the unit test to repurpose the
+test as a load and performance test!<br>
+</span>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the Appvance Enterprise window use
+the Play Button from the Start Screen -&gt; Browse command. Use the file selector to
+choose FlexFlashAMFTests/AMF_Load_Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  <li>Set the test to be a load
+test in the General tab.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Editor configuring a load test in the General tab" src="images/loadtest_scenario.png"><br>
+    <br>
+    <br>
+The
+above code
+tells Appvance to operate a load and performance test at three levels
+of concurrently running simulated users (crlevel.) The test operates 2
+users, then 4 users, and then 8.<br>
+    <br>
+This test repurposes the functional test as a load and performance
+test. The use case and options remain the same in this load test.<br>
+    <br>
+    <br>
+  </li>
+  <li>Click the Appvance Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px; " alt="Test results from a load test" src="images/loadtest_controller.png"><br>
+    <span style="font-weight: bold;"><br>
+    </span>Appvance operates the test in 2 concurrently running
+simulated
+users, then 4 users, then 8 users. The Real Time Scalability Index
+contrasts the Transaction Per Second (TPS) for each of the three user
+levels.<br>
+    <br>
+The Real Time Scalability Index shows the troughput of the application
+under test as the load increases. For example, when we double the
+number of users from 2 to 4 one would expect twice the number of
+transactions processed per second (TPS.) The Scalability Index is an
+immediate way to understand the scalability of the application and
+perform root cause analysis and mitigation of performance bottlenecks.<br>
+    <br>
+  </li>
+</ol>
+<h2 style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><a name="task5"></a>Task 5: Repurpose The
+Functional Test
+As A Business Service Monitor</span></h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">Business Service
+Monitor testing enforces and proves a Service Level
+Agreement (SLA) by operating a test periodically. For example, a
+monitor runs a test every 30 minutes. APC
+repurposes&nbsp;functional
+tests as a monitor without requiring any change to the unit test.
+Changing 1 instruction in the&nbsp; TestScenario is all it takes!</span><br>
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+  <li>In the APC window use
+the Play Button from the Start Screen -&gt; Browse Command. Use the file selector to
+choose FlexFlashAMFTests/AMF_Monitor_Test.scenario<br>
+    <br>
+  </li>
+  <li>Click the Edit icon in the
+TestScenario Controller panel.<br>
+    <br>
+  </li>
+  <li>Set the test to be a load
+test in the General panel.<br>
+    <br>
+    <img src="images/amf_monitor_editor.png" alt="Editor showing General tab settings for a monitor test" style="border: 1px solid ; width: 1000px; "><br>
+    <br>
+  </li>
+  <li>This test repurposes the load test as a production monitor. The
+use case and options remain the same in this monitor.<br>
+    <br>
+  </li>
+  <li>Click the Play button and watch the results.<br>
+    <br>
+    <img style="border: 1px solid ; width: 1000px;" alt="Monitor controller window showing successful runs of the test use case" src="images/amf_controller_monitor.png"><br>
+  </li>
+</ol>
+<span style="font-family: Helvetica,Arial,sans-serif;"><br>
+APC's AMF protocol handler uses the </span><a style="font-family: Helvetica,Arial,sans-serif;" href="http://sourceforge.net/projects/openamf/">OpenAMF - Java Flash
+Remoting</a><span style="font-family: Helvetica,Arial,sans-serif;">
+library.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<table style="font-family: Helvetica,Arial,sans-serif;" bgcolor="#0000cc" border="0" cellpadding="0" cellspacing="1" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#ffffcc" border="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr>
+            <td width="10">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="10"></p>
+            </td>
+            <td width="120">
+            <p><a href="http://www.appvance.com/"><img style="border: 0px solid ; width: 96px; height: 40px;" alt="" src="images/ptt_logo_tm_yellow.jpg" x-claris-useimagewidth="" x-claris-useimageheight=""></a></p>
+            </td>
+            <td width="30">
+            <p><img src="images/blank.gif" x-claris-useimageheight="" align="bottom" height="1" width="30"></p>
+            </td>
+            <td>
+            <p><font size="-1">Additional
+documentation, product downloads and updates are at&nbsp;<a href="http://www.appvance.com/">www.appvance.com</a>.
+While the Apppvance PerformanceCloud software is distributed under a commercial
+license, the documentation remains (c) 2014 Appvance. All rights
+reserved. Appvance is a trademark of the Appvance company.</font></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>

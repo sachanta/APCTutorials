@@ -51,7 +51,7 @@ file 'LICENSE.txt', which is part of this source code package.
       <opt name="global_concurrent_users" value="0"/>
       <opt name="SleepTime" value="1"/>
       <opt name="RampUpUsers" value="1"/>
-      <opt name="RampUpSeconds" value="30"/>
+      <opt name="RampUpSeconds" value="10"/>
       <opt name="MaxRampUpTime" value="300"/>
       <opt name="RampDownUsers" value="1"/>
       <opt name="RampDownSeconds" value="1"/>
@@ -88,9 +88,6 @@ file 'LICENSE.txt', which is part of this source code package.
     <controller name="Iteration1">
       <round name="Iteration1" totalusers="8" time="2" testtype="users" totaliterations="8"/>
     </controller>
-    <controller name="Iteration2">
-      <round name="Iteration2" totalusers="4" time="1" testtype="users" totaliterations="4"/>
-    </controller>
     <testcase name="TestCase1" expand="yes" iterationState="true">
       <test>
         <run name="Test1" testclass="sahi" method="firefox" langtype="ds" resource="AddCompany.ds"/>
@@ -118,7 +115,6 @@ file 'LICENSE.txt', which is part of this source code package.
         </locations>
       </testcase>
     </iteration>
-    <iteration controller="Iteration2" name="Iteration2"/>
   </execution>
   <logs>
     <log type="database">

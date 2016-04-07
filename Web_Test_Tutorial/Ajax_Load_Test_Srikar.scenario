@@ -86,7 +86,7 @@ file 'LICENSE.txt', which is part of this source code package.
   </options>
   <templates>
     <controller name="Iteration1">
-      <round name="Iteration1" totalusers="2" time="1" testtype="users" totaliterations="2"/>
+      <round name="Iteration1" totalusers="8" time="2" testtype="users" totaliterations="8"/>
     </controller>
     <controller name="Iteration2">
       <round name="Iteration2" totalusers="4" time="1" testtype="users" totaliterations="4"/>
@@ -107,9 +107,9 @@ file 'LICENSE.txt', which is part of this source code package.
   <monitoring enablednodes="true" enabledtarget="false"/>
   <execution type="loadtest">
     <iteration controller="Iteration1" name="Iteration1">
-      <testcase name="TestCase1" users="2">
+      <testcase name="TestCase1" users="4">
         <locations>
-          <location name="localhost" users="2"/>
+          <location name="localhost" users="4"/>
         </locations>
       </testcase>
       <testcase name="TestCase2" users="4">

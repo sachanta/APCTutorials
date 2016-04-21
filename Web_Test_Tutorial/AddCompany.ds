@@ -61,7 +61,21 @@
 
 
 
-<step action="setValue" value="&quot;500&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="4">
+<step action="htmlSnapshot" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="4">
+	<dialect type="sahi">
+		<accessor type='' value='' selected="false"/>
+	</dialect>
+	<dialect type="selenium">
+		<accessor attribute='' value='' selected="false"/>
+	</dialect>
+	<dialect type="flextesting">
+		<accessor type='' attribute='' value='' selected="false"/>
+	</dialect>
+</step>
+
+
+
+<step action="setValue" value="&quot;500&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="5">
 	<dialect type="sahi">
 		<accessor type="setValue" value="textbox(&quot;price&quot;)" selected="true"/>
 		<accessor type="setValue" value="textbox(&quot;price&quot;)" selected="false"/>
@@ -77,7 +91,7 @@
 
 
 
-<step action="setValue" value="&quot;50&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="5">
+<step action="setValue" value="&quot;50&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="6">
 	<dialect type="sahi">
 		<accessor type="setValue" value="textbox(&quot;change&quot;)" selected="true"/>
 		<accessor type="setValue" value="textbox(&quot;change&quot;)" selected="false"/>
@@ -93,7 +107,7 @@
 
 
 
-<step action="click" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="6">
+<step action="click" value='' type="web" desc='' isThinkTime='false' isCommented='false' sequence="7">
 	<dialect type="sahi">
 		<accessor type="click" value="button(&quot;Save&quot;)" selected="true"/>
 		<accessor type="click" value="button(&quot;x-btn-text&quot;)" selected="false"/>
@@ -108,7 +122,7 @@
 
 
 
-<step action="assertExists" value="&quot;Google&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="7">
+<step action="assertExists" value="&quot;Google&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="8">
 	<dialect type="sahi">
 		<accessor type="assertContainsText" value="div(&quot;PushToTest&quot;)" selected="true"/>
 		<accessor type="assertContainsText" value="div(&quot;x-grid3-cell-inner x-grid3-col-1[20]&quot;)" selected="false"/>

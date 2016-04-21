@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <testcase name='AddCompany' description='' author='' version=''>
 
 <metainfo>
@@ -44,7 +45,7 @@
 
 
 
-<step action="setValue" value="&quot;PushToTest&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="3">
+<step action="setValue" value="&quot;Google&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="3">
 	<dialect type="sahi">
 		<accessor type="setValue" value="textbox(&quot;company&quot;)" selected="true"/>
 		<accessor type="setValue" value="textbox(&quot;company&quot;)" selected="false"/>
@@ -107,7 +108,7 @@
 
 
 
-<step action="assertExists" value="&quot;PushToTest&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="7">
+<step action="assertExists" value="&quot;Google&quot;" type="web" desc='' isThinkTime='false' isCommented='false' sequence="7">
 	<dialect type="sahi">
 		<accessor type="assertContainsText" value="div(&quot;PushToTest&quot;)" selected="true"/>
 		<accessor type="assertContainsText" value="div(&quot;x-grid3-cell-inner x-grid3-col-1[20]&quot;)" selected="false"/>
